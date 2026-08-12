@@ -3,203 +3,367 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-TAPER SYSTEM // HIGH-PERFORMANCE DASHBOARD</title>
+    <title>⚡ V-TAPER SYSTEM 365 // CYBER-ATHLETE SUITE</title>
+
+    <!-- Web App Manifest for PWA -->
+    <link rel="manifest" href='data:application/manifest+json,{"name":"V-Taper System 365","short_name":"V-Taper","start_url":".","display":"standalone","background_color":"#060913","theme_color":"#00f2fe","icons":[{"src":"https://img.icons8.com/neon/192/000000/dumbbell.png","sizes":"192x192","type":"image/png"}]}'>
+    <meta name="theme-color" content="#00f2fe">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+    <!-- Chart.js for Interactive Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
     <style>
+        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
+
         :root {
-            --bg-color: #060913;
-            --panel-bg: rgba(18, 26, 47, 0.85);
-            --border-color: #1e2942;
+            --bg-color: #040711;
+            --panel-bg: rgba(13, 20, 36, 0.88);
+            --border-color: #1a2744;
             --neon-blue: #00f2fe;
-            --neon-purple: #7928ca;
-            --neon-red: #ff0055;
-            --neon-green: #00dfa2;
-            --text-main: #f1f5f9;
+            --neon-purple: #9d4edd;
+            --neon-pink: #ff007f;
+            --neon-red: #ff2a5f;
+            --neon-green: #00ffaa;
+            --neon-gold: #ffb703;
+            --text-main: #f8fafc;
             --text-muted: #64748b;
         }
 
+        * {
+            box-sizing: border-box;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
         body {
-            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            font-family: 'Rajdhani', sans-serif;
             background-color: var(--bg-color);
-            background-image: radial-gradient(circle at 50% 0%, #111e38 0%, var(--bg-color) 70%);
+            background-image: 
+                radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15) 0%, transparent 50%),
+                radial-gradient(circle at 100% 100%, rgba(157, 78, 221, 0.1) 0%, transparent 40%),
+                linear-gradient(180deg, #040711 0%, #080e1e 100%);
+            background-attachment: fixed;
             color: var(--text-main);
             margin: 0;
-            padding: 20px;
+            padding: 15px;
             display: flex;
             justify-content: center;
             min-height: 100vh;
         }
 
         .container {
-            max-width: 900px;
+            max-width: 960px;
             width: 100%;
         }
 
+        /* HEADER & HERO */
         header {
             text-align: center;
-            padding: 10px 0 20px;
-            border-bottom: 1px solid var(--border-color);
-            margin-bottom: 20px;
+            padding: 15px 0 25px;
+            border-bottom: 2px solid var(--border-color);
+            margin-bottom: 25px;
             position: relative;
         }
 
         .hero-title {
-            font-size: 2.2rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.3rem;
             font-weight: 900;
-            letter-spacing: 2px;
-            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            letter-spacing: 3px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
+            background-size: 200% auto;
             -webkit-background-clip: text;
             -webkit-text-fill-color: transparent;
+            animation: shine 4s linear infinite;
             margin: 0;
             text-transform: uppercase;
+            text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
         }
 
+        @keyframes shine {
+            to { background-position: 200% center; }
+        }
+
+        .badge-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+
+        .pwa-badge {
+            background: rgba(0, 255, 170, 0.1);
+            border: 1px solid var(--neon-green);
+            color: var(--neon-green);
+            padding: 4px 12px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 1px;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        /* CARDS & PANELS */
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 20px;
+            margin-bottom: 20px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.5);
+            backdrop-filter: blur(12px);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0; left: 0; width: 100%; height: 2px;
+            background: linear-gradient(90deg, transparent, var(--neon-blue), transparent);
+        }
+
+        /* STATS GRID */
         .stats-grid {
             display: grid;
             grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
-            gap: 15px;
+            gap: 12px;
             margin-bottom: 20px;
         }
 
         .stat-card {
-            background: var(--panel-bg);
+            background: rgba(10, 16, 30, 0.8);
             border: 1px solid var(--border-color);
             padding: 15px;
             border-radius: 12px;
             text-align: center;
-            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
-            backdrop-filter: blur(8px);
-            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
         .stat-card:hover {
-            transform: translateY(-3px);
             border-color: var(--neon-blue);
+            transform: translateY(-3px);
+            box-shadow: 0 5px 15px rgba(0, 242, 254, 0.2);
+        }
+
+        .stat-label {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            font-weight: 700;
+            letter-spacing: 1px;
         }
 
         .stat-value {
-            font-size: 1.6rem;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.5rem;
             font-weight: 800;
             color: var(--neon-blue);
             margin-top: 5px;
         }
 
-        .mode-toggle-bar {
-            display: flex;
-            justify-content: center;
+        /* ADAPTIVE NUTRITION ENGINE */
+        .macro-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(130px, 1fr));
             gap: 10px;
-            margin-bottom: 20px;
-            background: var(--panel-bg);
-            padding: 8px;
-            border-radius: 10px;
+            margin-top: 15px;
+        }
+
+        .macro-box {
+            background: rgba(0, 0, 0, 0.3);
             border: 1px solid var(--border-color);
+            border-radius: 10px;
+            padding: 12px;
+            text-align: center;
+        }
+
+        .macro-num {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.3rem;
+            font-weight: 700;
+        }
+
+        .input-weight {
+            background: #000;
+            border: 1px solid var(--neon-blue);
+            color: var(--neon-blue);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 1.1rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            width: 90px;
+            text-align: center;
+        }
+
+        /* NAVIGATION TABS */
+        .nav-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 20px;
+        }
+
+        .nav-btn {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 10px 18px;
+            border-radius: 10px;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            white-space: nowrap;
+        }
+
+        .nav-btn.active {
+            border-color: var(--neon-blue);
+            background: rgba(0, 242, 254, 0.15);
+            color: var(--neon-blue);
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.3);
+        }
+
+        .mode-bar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: rgba(0, 0, 0, 0.4);
+            padding: 8px 12px;
+            border-radius: 10px;
+            margin-bottom: 15px;
+            border: 1px solid var(--border-color);
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+
+        .btn-group {
+            display: flex;
+            gap: 6px;
         }
 
         .mode-btn {
             background: transparent;
-            border: none;
+            border: 1px solid transparent;
             color: var(--text-muted);
-            padding: 8px 16px;
+            padding: 6px 12px;
             border-radius: 6px;
             font-weight: 700;
+            font-size: 0.85rem;
             cursor: pointer;
-            transition: all 0.3s ease;
         }
 
         .mode-btn.active {
-            background: var(--neon-blue);
-            color: #000;
-            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
-        }
-
-        .day-selector {
-            display: flex;
-            gap: 8px;
-            overflow-x: auto;
-            padding-bottom: 10px;
-            margin-bottom: 20px;
-        }
-
-        .day-btn {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            color: var(--text-main);
-            padding: 12px 20px;
-            border-radius: 10px;
-            font-weight: 700;
-            cursor: pointer;
-            white-space: nowrap;
-            transition: all 0.2s ease;
-        }
-
-        .day-btn.active {
-            border-color: var(--neon-blue);
-            background: rgba(0, 242, 254, 0.1);
-            color: var(--neon-blue);
-            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
-        }
-
-        .card {
-            background: var(--panel-bg);
-            border: 1px solid var(--border-color);
-            border-radius: 14px;
-            padding: 20px;
-            margin-bottom: 20px;
-            backdrop-filter: blur(8px);
-        }
-
-        .alert-banner {
-            background: rgba(255, 0, 85, 0.1);
-            border: 1px solid var(--neon-red);
-            border-radius: 10px;
-            padding: 12px 16px;
-            margin-bottom: 20px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-        }
-
-        .penalty-btn {
-            background: var(--neon-red);
+            background: var(--neon-purple);
             color: #fff;
-            border: none;
-            padding: 8px 14px;
-            border-radius: 6px;
-            font-weight: 700;
-            cursor: pointer;
-            transition: opacity 0.2s;
+            border-color: var(--neon-purple);
+            box-shadow: 0 0 10px rgba(157, 78, 221, 0.4);
         }
 
-        .penalty-btn:hover {
-            opacity: 0.9;
+        /* EXERCISE ITEMS */
+        .exercise-item {
+            background: rgba(10, 16, 28, 0.6);
+            border: 1px solid var(--border-color);
+            border-radius: 12px;
+            padding: 15px;
+            margin-bottom: 12px;
         }
 
-        .exercise-row {
-            border-bottom: 1px solid var(--border-color);
-            padding: 15px 0;
+        .exercise-item:hover {
+            border-color: var(--neon-blue);
         }
 
-        .exercise-row:last-child {
-            border-bottom: none;
-        }
-
-        .exercise-header {
+        .exercise-top {
             display: flex;
             justify-content: space-between;
             align-items: center;
+            gap: 10px;
         }
 
-        .exercise-info {
-            font-size: 0.85rem;
+        .check-box {
+            width: 24px;
+            height: 24px;
+            accent-color: var(--neon-blue);
+            cursor: pointer;
+        }
+
+        .ex-title {
+            font-weight: 700;
+            font-size: 1.1rem;
+            flex-grow: 1;
+        }
+
+        .ex-details {
             color: var(--text-muted);
-            margin-top: 6px;
+            font-size: 0.85rem;
+            margin-top: 8px;
+            padding-top: 8px;
+            border-top: 1px dashed var(--border-color);
             line-height: 1.4;
         }
 
-        .checkbox-custom {
-            width: 22px;
-            height: 22px;
-            accent-color: var(--neon-blue);
+        /* ALERT & PENALTY */
+        .alert-box {
+            background: rgba(255, 42, 95, 0.1);
+            border: 1px solid var(--neon-red);
+            border-radius: 12px;
+            padding: 12px 16px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .btn-danger {
+            background: var(--neon-red);
+            color: #fff;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 700;
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.8rem;
             cursor: pointer;
+        }
+
+        .btn-danger:hover {
+            box-shadow: 0 0 15px rgba(255, 42, 95, 0.5);
+        }
+
+        .btn-primary {
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            color: #000;
+            border: none;
+            padding: 8px 16px;
+            border-radius: 8px;
+            font-weight: 800;
+            font-family: 'Orbitron', sans-serif;
+            cursor: pointer;
+        }
+
+        /* EASTER EGG BANNER */
+        .secret-banner {
+            display: none;
+            background: linear-gradient(90deg, var(--neon-gold), var(--neon-red));
+            color: #000;
+            font-weight: 900;
+            font-family: 'Orbitron', sans-serif;
+            text-align: center;
+            padding: 15px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            animation: pulse 1s infinite alternate;
+        }
+
+        @keyframes pulse {
+            from { transform: scale(0.98); }
+            to { transform: scale(1.01); box-shadow: 0 0 25px var(--neon-gold); }
+        }
+
+        canvas {
+            max-height: 250px;
         }
     </style>
 </head>
@@ -207,292 +371,439 @@
 
 <div class="container">
     <header>
-        <h1 class="hero-title" id="app-title" style="cursor:pointer;">⚡ V-TAPER SYSTEM 365 ⚡</h1>
-        <p style="color: var(--text-muted); margin-top: 5px;">12-Month Progressive Overload & Aesthetic Engine</p>
+        <h1 class="hero-title" id="secret-trigger" title="Tap 5 times to trigger Cyber Mode!">⚡ V-TAPER SYSTEM 365 ⚡</h1>
+        <div class="badge-bar">
+            <span class="pwa-badge">📱 PWA APP READY</span>
+            <span class="pwa-badge" style="border-color: var(--neon-purple); color: var(--neon-purple);">📊 CHART ENGINE ACTIVE</span>
+            <span class="pwa-badge" style="border-color: var(--neon-gold); color: var(--neon-gold);">🥗 ADAPTIVE MACROS ACTIVE</span>
+        </div>
     </header>
 
-    <!-- Goal & Intensity Banner -->
+    <!-- Easter Egg Banner -->
+    <div id="secret-banner" class="secret-banner">
+        🔥 CYBER-OVERDRIVE ACTIVATED! (+1000 OVERLOAD XP BONUS) 🔥
+    </div>
+
+    <!-- Active Goal & Phase Banner -->
     <div class="card" style="border-color: var(--neon-purple);">
-        <div style="display: flex; justify-content: space-between; align-items: center;">
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
             <div>
-                <span style="color: var(--neon-purple); font-weight: 800;">CURRENT GOAL:</span>
-                <span id="goal-display">Phase 1 - Neural Adaptation & Lat Width Flare</span>
+                <span style="color: var(--neon-purple); font-family: 'Orbitron', sans-serif; font-weight: 700;">CURRENT PHASE:</span>
+                <span id="phase-title" style="font-weight: 700; font-size: 1.1rem; margin-left: 8px;">Phase 1: Neural Priming & Lat Width Flare</span>
             </div>
-            <button onclick="advanceWeek()" style="background: var(--border-color); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">Next Week ⏩</button>
+            <button class="btn-primary" onclick="advanceWeek()">NEXT WEEK ⏩</button>
         </div>
     </div>
 
-    <!-- Stats Dashboard -->
+    <!-- Stats Dashboard Grid -->
     <div class="stats-grid">
         <div class="stat-card">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">PROGRAM TIMELINE</div>
+            <div class="stat-label">PROGRAM TIMELINE</div>
             <div id="stat-week" class="stat-value">Week 1 / 52</div>
         </div>
         <div class="stat-card">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">TOTAL XP</div>
+            <div class="stat-label">TOTAL OVERLOAD XP</div>
             <div id="stat-xp" class="stat-value">0 XP</div>
         </div>
         <div class="stat-card">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">ACTIVE STREAK</div>
+            <div class="stat-label">ACTIVE STREAK</div>
             <div id="stat-streak" class="stat-value" style="color: var(--neon-green);">0 Days 🔥</div>
         </div>
         <div class="stat-card">
-            <div style="color: var(--text-muted); font-size: 0.8rem;">RANK LEVEL</div>
-            <div id="stat-level" class="stat-value" style="font-size: 1.1rem; color: var(--neon-purple);">Rookie</div>
+            <div class="stat-label">ATHLETE RANK</div>
+            <div id="stat-rank" class="stat-value" style="font-size: 1.1rem; color: var(--neon-gold);">Rookie</div>
         </div>
     </div>
 
-    <!-- Penalty Bar -->
-    <div class="alert-banner">
-        <div>
-            <strong>🚨 MISSED A SESSION TODAY?</strong>
-            <div style="font-size: 0.8rem; color: var(--text-muted);">Honesty policy: Logging a miss resets your streak and deducts 100 XP.</div>
-        </div>
-        <button class="penalty-btn" onclick="applyPenalty()">LOG MISSED DAY</button>
-    </div>
-
-    <!-- Location / Equipment Mode Toggle -->
-    <div class="mode-toggle-bar">
-        <span style="align-self: center; font-size: 0.85rem; font-weight: bold; margin-right: 10px;">VERSION:</span>
-        <button class="mode-btn active" id="btn-cult" onclick="setMode('cult')">Cult Gym</button>
-        <button class="mode-btn" id="btn-alt" onclick="setMode('alt')">Gym Alt</button>
-        <button class="mode-btn" id="btn-home" onclick="setMode('home')">Home Version</button>
-    </div>
-
-    <!-- Day Navigation -->
-    <div class="day-selector">
-        <button class="day-btn active" onclick="loadDay('Mon')">Mon (Upper)</button>
-        <button class="day-btn" onclick="loadDay('Tue')">Tue (Lower)</button>
-        <button class="day-btn" onclick="loadDay('Wed')">Wed (Push)</button>
-        <button class="day-btn" onclick="loadDay('Thu')">Thu (Pull)</button>
-        <button class="day-btn" onclick="loadDay('Fri')">Fri (Heavy Legs)</button>
-        <button class="day-btn" onclick="loadDay('Sat')">Sat (Hoops 🏀)</button>
-        <button class="day-btn" onclick="loadDay('Sun')">Sun (Hoops 🏀)</button>
-    </div>
-
-    <!-- Exercises & Details -->
+    <!-- Adaptive Nutrition Engine Card -->
     <div class="card">
-        <h2 id="day-heading" style="margin-top: 0; color: var(--neon-blue);">Monday Protocol</h2>
-        <div id="exercise-container"></div>
+        <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 10px;">
+            <h2 style="margin: 0; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--neon-gold);">🥗 Adaptive Nutrition Engine</h2>
+            <div>
+                <label style="font-weight: 700; margin-right: 8px;">Current Weight:</label>
+                <input type="number" id="body-weight" class="input-weight" value="78" onchange="updateNutrition()"> <span style="font-weight: 700;">KG</span>
+            </div>
+        </div>
+        <div class="macro-grid">
+            <div class="macro-box">
+                <div style="color: var(--text-muted); font-size: 0.8rem;">DAILY PROTEIN</div>
+                <div id="macro-protein" class="macro-num" style="color: var(--neon-blue);">156g</div>
+            </div>
+            <div class="macro-box">
+                <div style="color: var(--text-muted); font-size: 0.8rem;">CALORIES</div>
+                <div id="macro-cals" class="macro-num" style="color: var(--neon-gold);">2,340</div>
+            </div>
+            <div class="macro-box">
+                <div style="color: var(--text-muted); font-size: 0.8rem;">CARBS</div>
+                <div id="macro-carbs" class="macro-num" style="color: var(--neon-green);">260g</div>
+            </div>
+            <div class="macro-box">
+                <div style="color: var(--text-muted); font-size: 0.8rem;">SNACK PROTEIN TARGET</div>
+                <div id="macro-snack" class="macro-num" style="color: var(--neon-pink);">70g</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Analytics Chart Panel -->
+    <div class="card">
+        <h2 style="margin-top: 0; font-family: 'Orbitron', sans-serif; font-size: 1.2rem; color: var(--neon-blue);">📊 Weekly Overload Analytics</h2>
+        <canvas id="analyticsChart"></canvas>
+    </div>
+
+    <!-- Penalty Alert Box -->
+    <div class="alert-box">
+        <div>
+            <strong style="color: var(--neon-red); font-family: 'Orbitron', sans-serif;">🚨 MISSED SESSION PENALTY</strong>
+            <div style="font-size: 0.85rem; color: var(--text-muted);">Logging a missed day resets streak to 0 and deducts 100 XP.</div>
+        </div>
+        <button class="btn-danger" onclick="triggerPenalty()">LOG MISSED DAY</button>
+    </div>
+
+    <!-- Navigation & Equipment Version Selector -->
+    <div class="mode-bar">
+        <span style="font-weight: 700; font-size: 0.9rem; color: var(--neon-blue);">EQUIPMENT MODE:</span>
+        <div class="btn-group">
+            <button class="mode-btn active" id="btn-cult" onclick="setMode('cult')">Cult Gym</button>
+            <button class="mode-btn" id="btn-alt" onclick="setMode('alt')">Gym Alt</button>
+            <button class="mode-btn" id="btn-home" onclick="setMode('home')">Home Version</button>
+        </div>
+    </div>
+
+    <!-- Day Tabs -->
+    <div class="nav-bar">
+        <button class="nav-btn active" onclick="loadDay('Mon')">Mon (Upper)</button>
+        <button class="nav-btn" onclick="loadDay('Tue')">Tue (Lower)</button>
+        <button class="nav-btn" onclick="loadDay('Wed')">Wed (Push)</button>
+        <button class="nav-btn" onclick="loadDay('Thu')">Thu (Pull)</button>
+        <button class="nav-btn" onclick="loadDay('Fri')">Fri (Heavy Legs)</button>
+        <button class="nav-btn" onclick="loadDay('Sat')">Sat (Hoops 🏀)</button>
+        <button class="nav-btn" onclick="loadDay('Sun')">Sun (Hoops 🏀)</button>
+    </div>
+
+    <!-- Daily Protocol Checklist -->
+    <div class="card">
+        <h2 id="day-title" style="margin-top: 0; font-family: 'Orbitron', sans-serif; color: var(--neon-blue);">Monday Protocol</h2>
+        <div id="exercise-list"></div>
     </div>
 </div>
 
 <script>
-    let state = JSON.parse(localStorage.getItem('vTaper365State')) || {
+    // System State with LocalStorage Persistence
+    let state = JSON.parse(localStorage.getItem('vTaper365_v2')) || {
         xp: 0,
         streak: 0,
         week: 1,
+        weight: 78,
         completed: {},
-        currentMode: 'cult'
+        mode: 'cult',
+        history: [10, 25, 45, 60, 85, 110, 140]
     };
+
+    // Audio Feedback using Web Audio API (No External Files Required!)
+    function playBeep(freq = 600, duration = 0.1) {
+        try {
+            const ctx = new (window.AudioContext || window.webkitAudioContext)();
+            const osc = ctx.createOscillator();
+            const gain = ctx.createGain();
+            osc.frequency.value = freq;
+            osc.connect(gain);
+            gain.connect(ctx.destination);
+            osc.start();
+            gain.gain.exponentialRampToValueAtTime(0.00001, ctx.currentTime + duration);
+            osc.stop(ctx.currentTime + duration);
+        } catch(e){}
+    }
 
     const database = {
         Mon: {
-            title: "Monday: Upper Body Compound",
+            title: "Monday: Upper Body Compound Power",
             items: [
                 {
                     cult: "Incline DB Bench Press (3 Sets x 8-10 Reps)",
                     alt: "Smith Machine Incline Press",
                     home: "Decline Push-Ups (Feet Elevated)",
-                    info: "Targets upper chest. Maintain a 30-degree incline and squeeze at the top."
+                    info: "Targets upper clavicular chest. Maintains 30-degree incline and sharp upper chest contraction."
                 },
                 {
                     cult: "Wide-Grip Lat Pulldown (3 Sets x 10-12 Reps)",
                     alt: "Assisted Pull-Up Machine",
-                    home: "Inverted Rows under Table / Doorway Rows",
-                    info: "Primary V-Taper builder! Drive elbows down toward your hip bones."
+                    home: "Inverted Towel / Table Rows",
+                    info: "Primary V-Taper Builder! Drive elbows directly toward hip bones to flare lats."
                 },
                 {
                     cult: "Overhead DB Shoulder Press (3 Sets x 8-10 Reps)",
                     alt: "Seated Machine Shoulder Press",
                     home: "Pike Push-Ups",
-                    info: "Builds clavicular width and shoulder girdle strength."
+                    info: "Builds shoulder girdle thickness and broadens upper frame."
                 },
                 {
                     cult: "☕ Morning Swap: Whey Cold Coffee",
-                    alt: "☕ Morning Swap: Black Coffee + Protein Shake",
+                    alt: "☕ Morning Swap: Black Coffee + Whey Shake",
                     home: "☕ Morning Swap: Whey Cold Coffee",
-                    info: "Replaces high-sugar milk coffee. Delivers 25g fast-digesting protein."
+                    info: "Replaces sugary morning coffee. Delivers 25g fast protein."
                 }
             ]
         },
         Tue: {
-            title: "Tuesday: Lower Body & Core",
+            title: "Tue: Lower Body Hypertrophy & Core",
             items: [
                 {
-                    cult: "Barbell Squats / Hack Squats (3 Sets x 8-10 Reps)",
+                    cult: "Barbell Back Squats (3 Sets x 8-10 Reps)",
                     alt: "Leg Press Machine",
-                    home: "Weighted Backpack Goblet Squats",
-                    info: "Builds quad volume and systemic leg strength for basketball power."
+                    home: "Weighted Backpack Squats",
+                    info: "Builds quad volume and athletic stamina for weekend basketball."
                 },
                 {
                     cult: "Romanian Deadlifts (RDLs) (3 Sets x 10 Reps)",
                     alt: "Smith Machine RDL",
                     home: "Single-Leg Bodyweight RDLs",
-                    info: "Targets hamstrings and glutes while strengthening lower back posture."
+                    info: "Targets posterior chain (hamstrings & glutes) for vertical jump power."
                 }
             ]
         },
         Wed: {
-            title: "Wednesday: Push & Lateral Width",
+            title: "Wed: Push & Lateral Deltoid Width",
             items: [
                 {
                     cult: "Cable Lateral Raises (4 Sets x 12-15 Reps)",
                     alt: "Dumbbell Side Raises",
                     home: "Resistance Band Side Raises",
-                    info: "Crucial for capping side delts to broaden upper body proportions."
+                    info: "Crucial for capping side delts to create maximum shoulder-to-waist ratio."
                 }
             ]
         },
         Thu: {
-            title: "Thursday: Pull & Lat Expansion",
+            title: "Thu: Pull & Lat Expansion",
             items: [
                 {
                     cult: "Seated Cable Rows (3 Sets x 10-12 Reps)",
                     alt: "Single-Arm DB Rows",
-                    home: "Resistance Band Rows",
-                    info: "Adds upper back thickness and lat flare."
+                    home: "Doorway / Band Rows",
+                    info: "Adds upper back thickness and expands lateral back flare."
                 }
             ]
         },
         Fri: {
-            title: "Friday: Heavy Legs Routine",
+            title: "Fri: Heavy Legs Power Session",
             items: [
                 {
                     cult: "Heavy Leg Press (4 Sets x 8-10 Reps)",
-                    alt: "Barbell Back Squats",
+                    alt: "Heavy Barbell Squats",
                     home: "Walking DB Lunges",
-                    info: "Maximum strength output before weekend recovery and basketball."
+                    info: "Max muscle stimulus before weekend court practice."
                 }
             ]
         },
         Sat: {
-            title: "Saturday: Basketball & Agility",
+            title: "Sat: Court Agility & High Cardio 🏀",
             items: [
                 {
-                    cult: "2 Hours Basketball (7:00 - 9:00 AM)",
-                    alt: "Court Agility Drills",
-                    home: "High-Intensity Jump Rope Circuit",
-                    info: "Burns midsection calories and builds fast-twitch explosive conditioning."
+                    cult: "2 Hours Basketball (7:00 AM - 9:00 AM)",
+                    alt: "Court Sprint Intervals",
+                    home: "Jump Rope HIIT Circuit",
+                    info: "Burns midsection calories while building fast-twitch agility."
                 }
             ]
         },
         Sun: {
-            title: "Sunday: Basketball & Active Recovery",
+            title: "Sun: Court Endurance & Recovery 🏀",
             items: [
                 {
-                    cult: "2 Hours Basketball (7:00 - 9:00 AM)",
-                    alt: "Light Cardio & Full Body Stretch",
-                    home: "Foam Rolling & Mobility Circuit",
-                    info: "Promotes blood flow, flushes lactic acid, and improves flexibility."
+                    cult: "2 Hours Basketball (7:00 AM - 9:00 AM)",
+                    alt: "Light Cycling & Mobility",
+                    home: "Foam Rolling & Full Stretch",
+                    info: "Flushes metabolic waste and enhances overall flexibility."
                 }
             ]
         }
     };
 
     let activeDay = 'Mon';
+    let chartInstance = null;
 
     function saveState() {
-        localStorage.setItem('vTaper365State', JSON.stringify(state));
-        renderDashboard();
+        localStorage.setItem('vTaper365_v2', JSON.stringify(state));
+        render();
     }
 
-    function renderDashboard() {
+    function updateNutrition() {
+        const w = parseFloat(document.getElementById('body-weight').value) || 78;
+        state.weight = w;
+        
+        // 2g protein per kg bodyweight target
+        const protein = Math.round(w * 2.0);
+        const cals = Math.round(w * 30);
+        const carbs = Math.round(w * 3.3);
+        const snackProtein = Math.round(protein * 0.45); // Snacking replaces main meal protein gap
+
+        document.getElementById('macro-protein').innerText = protein + 'g';
+        document.getElementById('macro-cals').innerText = cals.toLocaleString();
+        document.getElementById('macro-carbs').innerText = carbs + 'g';
+        document.getElementById('macro-snack').innerText = snackProtein + 'g';
+
+        saveState();
+    }
+
+    function initChart() {
+        const ctx = document.getElementById('analyticsChart').getContext('2d');
+        chartInstance = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: ['W1', 'W2', 'W3', 'W4', 'W5', 'W6', 'Current'],
+                datasets: [{
+                    label: 'Overload XP Trend',
+                    data: state.history,
+                    borderColor: '#00f2fe',
+                    backgroundColor: 'rgba(0, 242, 254, 0.1)',
+                    borderWidth: 3,
+                    fill: true,
+                    tension: 0.4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { ticks: { color: '#64748b' }, grid: { color: '#1a2744' } },
+                    y: { ticks: { color: '#64748b' }, grid: { color: '#1a2744' } }
+                }
+            }
+        });
+    }
+
+    function render() {
         document.getElementById('stat-week').innerText = `Week ${state.week} / 52`;
         document.getElementById('stat-xp').innerText = `${state.xp} XP`;
         document.getElementById('stat-streak').innerText = `${state.streak} Days 🔥`;
         
         let rank = "Rookie";
-        if (state.xp >= 400) rank = "Novice 📐";
-        if (state.xp >= 1200) rank = "Lat Specialist 🦅";
-        if (state.xp >= 2500) rank = "Pro Athlete 🏋️";
-        if (state.xp >= 5000) rank = "V-Taper Master 👑";
-        document.getElementById('stat-level').innerText = rank;
+        if (state.xp >= 300) rank = "V-Taper Novice 📐";
+        if (state.xp >= 800) rank = "Lat Specialist 🦅";
+        if (state.xp >= 1800) rank = "Pro Athlete 🏋️";
+        if (state.xp >= 3500) rank = "V-Taper Master 👑";
+        document.getElementById('stat-rank').innerText = rank;
 
-        // Update Goal based on Week
         if (state.week <= 4) {
-            document.getElementById('goal-display').innerText = "Phase 1 - Neural Adaptation & Lat Width Flare";
+            document.getElementById('phase-title').innerText = "Phase 1: Neural Priming & Lat Width Flare";
         } else if (state.week <= 12) {
-            document.getElementById('goal-display').innerText = "Phase 2 - V-Taper Frame Expansion & Upper Chest Pop";
+            document.getElementById('phase-title').innerText = "Phase 2: Frame Expansion & Upper Chest Pop";
         } else {
-            document.getElementById('goal-display').innerText = "Phase 3 - High-Definition Recomposition & Maximum Power";
+            document.getElementById('phase-title').innerText = "Phase 3: High-Definition Recomposition";
+        }
+
+        if (chartInstance) {
+            chartInstance.data.datasets[0].data = state.history;
+            chartInstance.update();
         }
     }
 
-    function setMode(mode) {
-        state.currentMode = mode;
+    function setMode(m) {
+        state.mode = m;
         document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
-        document.getElementById(`btn-${mode}`).classList.add('active');
+        document.getElementById(`btn-${m}`).classList.add('active');
         saveState();
         loadDay(activeDay);
     }
 
     function loadDay(dayKey) {
         activeDay = dayKey;
-        document.querySelectorAll('.day-btn').forEach(btn => {
-            btn.classList.toggle('active', btn.innerText.startsWith(dayKey));
+        document.querySelectorAll('.nav-btn').forEach(b => {
+            b.classList.toggle('active', b.innerText.startsWith(dayKey));
         });
 
         const dayData = database[dayKey];
-        document.getElementById('day-heading').innerText = dayData.title;
+        document.getElementById('day-title').innerText = dayData.title;
 
-        const container = document.getElementById('exercise-container');
+        const container = document.getElementById('exercise-list');
         container.innerHTML = '';
 
         dayData.items.forEach((item, index) => {
             const key = `${dayKey}_w${state.week}_${index}`;
             const isChecked = state.completed[key] || false;
-            const exerciseText = item[state.currentMode] || item.cult;
+            const text = item[state.mode] || item.cult;
 
             const div = document.createElement('div');
-            div.className = 'exercise-row';
+            div.className = 'exercise-item';
             div.innerHTML = `
-                <div class="exercise-header">
-                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:700;">
-                        <input type="checkbox" class="checkbox-custom" ${isChecked ? 'checked' : ''} onchange="toggleTask('${key}')">
-                        <span>${exerciseText}</span>
-                    </label>
+                <div class="exercise-top">
+                    <input type="checkbox" class="check-box" ${isChecked ? 'checked' : ''} onchange="toggleTask('${key}')">
+                    <span class="ex-title">${text}</span>
                 </div>
-                <div class="exercise-info">💡 ${item.info}</div>
+                <div class="ex-details">💡 ${item.info}</div>
             `;
             container.appendChild(div);
         });
     }
 
     function toggleTask(key) {
+        playBeep(800, 0.08);
         if (!state.completed[key]) {
             state.completed[key] = true;
             state.xp += 25;
             state.streak += 1;
+            state.history[state.history.length - 1] += 25;
         } else {
             state.completed[key] = false;
             state.xp = Math.max(0, state.xp - 25);
             state.streak = Math.max(0, state.streak - 1);
+            state.history[state.history.length - 1] = Math.max(0, state.history[state.history.length - 1] - 25);
         }
         saveState();
     }
 
-    function applyPenalty() {
-        if (confirm("Are you sure you want to log a missed session? This will deduct 100 XP and reset your active streak.")) {
+    function triggerPenalty() {
+        playBeep(200, 0.3);
+        if (confirm("Log a missed session? Streak will reset to 0 and 100 XP deducted.")) {
             state.xp = Math.max(0, state.xp - 100);
             state.streak = 0;
             saveState();
-            alert("Penalty Applied. Reset and regain focus for tomorrow!");
         }
     }
 
     function advanceWeek() {
+        playBeep(1000, 0.15);
         if (state.week < 52) {
             state.week += 1;
+            state.history.shift();
+            state.history.push(0);
             saveState();
             loadDay(activeDay);
         }
     }
 
-    // Initialize
-    setMode(state.currentMode || 'cult');
-    renderDashboard();
-    loadDay('Mon');
+    // Easter Egg Trigger (5 fast clicks on Title)
+    let clicks = 0;
+    document.getElementById('secret-trigger').addEventListener('click', () => {
+        clicks++;
+        if (clicks === 5) {
+            playBeep(1200, 0.4);
+            document.getElementById('secret-banner').style.display = 'block';
+            state.xp += 1000;
+            saveState();
+            setTimeout(() => {
+                document.getElementById('secret-banner').style.display = 'none';
+            }, 4000);
+            clicks = 0;
+        }
+    });
+
+    // PWA Service Worker Inline Registration
+    if ('serviceWorker' in navigator) {
+        const swCode = "self.addEventListener('fetch', function(e) {});";
+        const blob = new Blob([swCode], {type: 'application/javascript'});
+        const swUrl = URL.createObjectURL(blob);
+        navigator.serviceWorker.register(swUrl).catch(()=>{});
+    }
+
+    // Initialization
+    window.onload = () => {
+        document.getElementById('body-weight').value = state.weight;
+        initChart();
+        updateNutrition();
+        setMode(state.mode || 'cult');
+        loadDay('Mon');
+    };
 </script>
 </body>
 </html>
