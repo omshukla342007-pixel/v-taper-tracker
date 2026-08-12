@@ -66,11 +66,18 @@
             position: relative;
         }
 
+        .header-top {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
         .hero-title {
             font-family: 'Orbitron', sans-serif;
-            font-size: 2.3rem;
+            font-size: 2.1rem;
             font-weight: 900;
-            letter-spacing: 3px;
+            letter-spacing: 2px;
             background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple), var(--neon-pink));
             background-size: 200% auto;
             -webkit-background-clip: text;
@@ -79,10 +86,29 @@
             margin: 0;
             text-transform: uppercase;
             text-shadow: 0 0 20px rgba(0, 242, 254, 0.3);
+            cursor: pointer;
         }
 
         @keyframes shine {
             to { background-position: 200% center; }
+        }
+
+        .btn-reset {
+            background: rgba(255, 42, 95, 0.15);
+            border: 1px solid var(--neon-red);
+            color: var(--neon-red);
+            font-family: 'Orbitron', sans-serif;
+            font-weight: 700;
+            font-size: 0.75rem;
+            padding: 6px 12px;
+            border-radius: 8px;
+            cursor: pointer;
+        }
+
+        .btn-reset:hover {
+            background: var(--neon-red);
+            color: #fff;
+            box-shadow: 0 0 10px rgba(255, 42, 95, 0.5);
         }
 
         .badge-bar {
@@ -371,7 +397,11 @@
 
 <div class="container">
     <header>
-        <h1 class="hero-title" id="secret-trigger" title="Tap 5 times to trigger Cyber Mode!">⚡ V-TAPER SYSTEM 365 ⚡</h1>
+        <div class="header-top">
+            <div style="width: 100px;"></div> <!-- Spacer for centering -->
+            <h1 class="hero-title" id="secret-trigger" title="Tap 5 times to trigger Cyber Mode!">⚡ V-TAPER 365 ⚡</h1>
+            <button class="btn-reset" onclick="resetProgress()">🔄 RESET</button>
+        </div>
         <div class="badge-bar">
             <span class="pwa-badge">📱 PWA APP READY</span>
             <span class="pwa-badge" style="border-color: var(--neon-purple); color: var(--neon-purple);">📊 CHART ENGINE ACTIVE</span>
@@ -488,18 +518,22 @@
 </div>
 
 <script>
-    // System State with LocalStorage Persistence
-    let state = JSON.parse(localStorage.getItem('vTaper365_v2')) || {
+    // Initial Default State
+    const defaultState = {
         xp: 0,
         streak: 0,
         week: 1,
         weight: 78,
         completed: {},
+        loggedDays: [], // Tracks completed full days
         mode: 'cult',
-        history: [10, 25, 45, 60, 85, 110, 140]
+        history: [0, 0, 0, 0, 0, 0, 0]
     };
 
-    // Audio Feedback using Web Audio API (No External Files Required!)
+    // System State with LocalStorage Persistence
+    let state = JSON.parse(localStorage.getItem('vTaper365_v3')) || defaultState;
+
+    // Audio Feedback using Web Audio API
     function playBeep(freq = 600, duration = 0.1) {
         try {
             const ctx = new (window.AudioContext || window.webkitAudioContext)();
@@ -518,102 +552,47 @@
         Mon: {
             title: "Monday: Upper Body Compound Power",
             items: [
-                {
-                    cult: "Incline DB Bench Press (3 Sets x 8-10 Reps)",
-                    alt: "Smith Machine Incline Press",
-                    home: "Decline Push-Ups (Feet Elevated)",
-                    info: "Targets upper clavicular chest. Maintains 30-degree incline and sharp upper chest contraction."
-                },
-                {
-                    cult: "Wide-Grip Lat Pulldown (3 Sets x 10-12 Reps)",
-                    alt: "Assisted Pull-Up Machine",
-                    home: "Inverted Towel / Table Rows",
-                    info: "Primary V-Taper Builder! Drive elbows directly toward hip bones to flare lats."
-                },
-                {
-                    cult: "Overhead DB Shoulder Press (3 Sets x 8-10 Reps)",
-                    alt: "Seated Machine Shoulder Press",
-                    home: "Pike Push-Ups",
-                    info: "Builds shoulder girdle thickness and broadens upper frame."
-                },
-                {
-                    cult: "☕ Morning Swap: Whey Cold Coffee",
-                    alt: "☕ Morning Swap: Black Coffee + Whey Shake",
-                    home: "☕ Morning Swap: Whey Cold Coffee",
-                    info: "Replaces sugary morning coffee. Delivers 25g fast protein."
-                }
+                { cult: "Incline DB Bench Press (3 Sets x 8-10 Reps)", alt: "Smith Machine Incline Press", home: "Decline Push-Ups (Feet Elevated)", info: "Targets upper clavicular chest. Maintains 30-degree incline and sharp upper chest contraction." },
+                { cult: "Wide-Grip Lat Pulldown (3 Sets x 10-12 Reps)", alt: "Assisted Pull-Up Machine", home: "Inverted Towel / Table Rows", info: "Primary V-Taper Builder! Drive elbows directly toward hip bones to flare lats." },
+                { cult: "Overhead DB Shoulder Press (3 Sets x 8-10 Reps)", alt: "Seated Machine Shoulder Press", home: "Pike Push-Ups", info: "Builds shoulder girdle thickness and broadens upper frame." },
+                { cult: "☕ Morning Swap: Whey Cold Coffee", alt: "☕ Morning Swap: Black Coffee + Whey Shake", home: "☕ Morning Swap: Whey Cold Coffee", info: "Replaces sugary morning coffee. Delivers 25g fast protein." }
             ]
         },
         Tue: {
             title: "Tue: Lower Body Hypertrophy & Core",
             items: [
-                {
-                    cult: "Barbell Back Squats (3 Sets x 8-10 Reps)",
-                    alt: "Leg Press Machine",
-                    home: "Weighted Backpack Squats",
-                    info: "Builds quad volume and athletic stamina for weekend basketball."
-                },
-                {
-                    cult: "Romanian Deadlifts (RDLs) (3 Sets x 10 Reps)",
-                    alt: "Smith Machine RDL",
-                    home: "Single-Leg Bodyweight RDLs",
-                    info: "Targets posterior chain (hamstrings & glutes) for vertical jump power."
-                }
+                { cult: "Barbell Back Squats (3 Sets x 8-10 Reps)", alt: "Leg Press Machine", home: "Weighted Backpack Squats", info: "Builds quad volume and athletic stamina for weekend basketball." },
+                { cult: "Romanian Deadlifts (RDLs) (3 Sets x 10 Reps)", alt: "Smith Machine RDL", home: "Single-Leg Bodyweight RDLs", info: "Targets posterior chain (hamstrings & glutes) for vertical jump power." }
             ]
         },
         Wed: {
             title: "Wed: Push & Lateral Deltoid Width",
             items: [
-                {
-                    cult: "Cable Lateral Raises (4 Sets x 12-15 Reps)",
-                    alt: "Dumbbell Side Raises",
-                    home: "Resistance Band Side Raises",
-                    info: "Crucial for capping side delts to create maximum shoulder-to-waist ratio."
-                }
+                { cult: "Cable Lateral Raises (4 Sets x 12-15 Reps)", alt: "Dumbbell Side Raises", home: "Resistance Band Side Raises", info: "Crucial for capping side delts to create maximum shoulder-to-waist ratio." }
             ]
         },
         Thu: {
             title: "Thu: Pull & Lat Expansion",
             items: [
-                {
-                    cult: "Seated Cable Rows (3 Sets x 10-12 Reps)",
-                    alt: "Single-Arm DB Rows",
-                    home: "Doorway / Band Rows",
-                    info: "Adds upper back thickness and expands lateral back flare."
-                }
+                { cult: "Seated Cable Rows (3 Sets x 10-12 Reps)", alt: "Single-Arm DB Rows", home: "Doorway / Band Rows", info: "Adds upper back thickness and expands lateral back flare." }
             ]
         },
         Fri: {
             title: "Fri: Heavy Legs Power Session",
             items: [
-                {
-                    cult: "Heavy Leg Press (4 Sets x 8-10 Reps)",
-                    alt: "Heavy Barbell Squats",
-                    home: "Walking DB Lunges",
-                    info: "Max muscle stimulus before weekend court practice."
-                }
+                { cult: "Heavy Leg Press (4 Sets x 8-10 Reps)", alt: "Heavy Barbell Squats", home: "Walking DB Lunges", info: "Max muscle stimulus before weekend court practice." }
             ]
         },
         Sat: {
             title: "Sat: Court Agility & High Cardio 🏀",
             items: [
-                {
-                    cult: "2 Hours Basketball (7:00 AM - 9:00 AM)",
-                    alt: "Court Sprint Intervals",
-                    home: "Jump Rope HIIT Circuit",
-                    info: "Burns midsection calories while building fast-twitch agility."
-                }
+                { cult: "2 Hours Basketball (7:00 AM - 9:00 AM)", alt: "Court Sprint Intervals", home: "Jump Rope HIIT Circuit", info: "Burns midsection calories while building fast-twitch agility." }
             ]
         },
         Sun: {
             title: "Sun: Court Endurance & Recovery 🏀",
             items: [
-                {
-                    cult: "2 Hours Basketball (7:00 AM - 9:00 AM)",
-                    alt: "Light Cycling & Mobility",
-                    home: "Foam Rolling & Full Stretch",
-                    info: "Flushes metabolic waste and enhances overall flexibility."
-                }
+                { cult: "2 Hours Basketball (7:00 AM - 9:00 AM)", alt: "Light Cycling & Mobility", home: "Foam Rolling & Full Stretch", info: "Flushes metabolic waste and enhances overall flexibility." }
             ]
         }
     };
@@ -622,19 +601,27 @@
     let chartInstance = null;
 
     function saveState() {
-        localStorage.setItem('vTaper365_v2', JSON.stringify(state));
+        localStorage.setItem('vTaper365_v3', JSON.stringify(state));
         render();
+    }
+
+    function resetProgress() {
+        if (confirm("⚠️ Are you sure you want to reset all workout logs, streaks, and XP back to zero?")) {
+            localStorage.removeItem('vTaper365_v3');
+            state = JSON.parse(JSON.stringify(defaultState));
+            saveState();
+            loadDay('Mon');
+        }
     }
 
     function updateNutrition() {
         const w = parseFloat(document.getElementById('body-weight').value) || 78;
         state.weight = w;
         
-        // 2g protein per kg bodyweight target
         const protein = Math.round(w * 2.0);
         const cals = Math.round(w * 30);
         const carbs = Math.round(w * 3.3);
-        const snackProtein = Math.round(protein * 0.45); // Snacking replaces main meal protein gap
+        const snackProtein = Math.round(protein * 0.45);
 
         document.getElementById('macro-protein').innerText = protein + 'g';
         document.getElementById('macro-cals').innerText = cals.toLocaleString();
@@ -736,19 +723,42 @@
         });
     }
 
+    function checkFullDayCompletion() {
+        const dayData = database[activeDay];
+        const dayId = `${activeDay}_w${state.week}`;
+
+        // Check if every item in the active day is completed
+        const allDone = dayData.items.every((_, index) => {
+            return state.completed[`${activeDay}_w${state.week}_${index}`] === true;
+        });
+
+        const dayAlreadyLogged = state.loggedDays.includes(dayId);
+
+        if (allDone && !dayAlreadyLogged) {
+            // Completed all exercises for this day for the first time!
+            state.streak += 1;
+            state.loggedDays.push(dayId);
+            playBeep(1000, 0.2); // Victory sound
+        } else if (!allDone && dayAlreadyLogged) {
+            // Unchecked an item, so day is no longer complete
+            state.streak = Math.max(0, state.streak - 1);
+            state.loggedDays = state.loggedDays.filter(d => d !== dayId);
+        }
+    }
+
     function toggleTask(key) {
         playBeep(800, 0.08);
         if (!state.completed[key]) {
             state.completed[key] = true;
             state.xp += 25;
-            state.streak += 1;
             state.history[state.history.length - 1] += 25;
         } else {
             state.completed[key] = false;
             state.xp = Math.max(0, state.xp - 25);
-            state.streak = Math.max(0, state.streak - 1);
             state.history[state.history.length - 1] = Math.max(0, state.history[state.history.length - 1] - 25);
         }
+
+        checkFullDayCompletion();
         saveState();
     }
 
