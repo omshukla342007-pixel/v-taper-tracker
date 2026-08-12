@@ -3,135 +3,203 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>V-Taper Transformation Tracker</title>
+    <title>V-TAPER SYSTEM // HIGH-PERFORMANCE DASHBOARD</title>
     <style>
         :root {
-            --bg-color: #0f172a;
-            --card-bg: #1e293b;
-            --accent: #38bdf8;
-            --accent-glow: #0284c7;
-            --text-color: #f8fafc;
-            --muted-text: #94a3b8;
-            --success: #22c55e;
+            --bg-color: #060913;
+            --panel-bg: rgba(18, 26, 47, 0.85);
+            --border-color: #1e2942;
+            --neon-blue: #00f2fe;
+            --neon-purple: #7928ca;
+            --neon-red: #ff0055;
+            --neon-green: #00dfa2;
+            --text-main: #f1f5f9;
+            --text-muted: #64748b;
         }
 
         body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
             background-color: var(--bg-color);
-            color: var(--text-color);
+            background-image: radial-gradient(circle at 50% 0%, #111e38 0%, var(--bg-color) 70%);
+            color: var(--text-main);
             margin: 0;
             padding: 20px;
             display: flex;
             justify-content: center;
+            min-height: 100vh;
         }
 
         .container {
-            max-width: 800px;
+            max-width: 900px;
             width: 100%;
         }
 
         header {
             text-align: center;
-            border-bottom: 2px solid var(--card-bg);
-            padding-bottom: 20px;
+            padding: 10px 0 20px;
+            border-bottom: 1px solid var(--border-color);
+            margin-bottom: 20px;
+            position: relative;
+        }
+
+        .hero-title {
+            font-size: 2.2rem;
+            font-weight: 900;
+            letter-spacing: 2px;
+            background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            margin: 0;
+            text-transform: uppercase;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+            gap: 15px;
             margin-bottom: 20px;
         }
 
-        .stats-bar {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
-            gap: 15px;
-            margin-bottom: 25px;
+        .stat-card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            padding: 15px;
+            border-radius: 12px;
+            text-align: center;
+            box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.37);
+            backdrop-filter: blur(8px);
+            transition: transform 0.2s ease, border-color 0.2s ease;
         }
 
-        .stat-card {
-            background: var(--card-bg);
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            border: 1px solid #334155;
+        .stat-card:hover {
+            transform: translateY(-3px);
+            border-color: var(--neon-blue);
         }
 
         .stat-value {
-            font-size: 1.5rem;
-            font-weight: bold;
-            color: var(--accent);
+            font-size: 1.6rem;
+            font-weight: 800;
+            color: var(--neon-blue);
+            margin-top: 5px;
+        }
+
+        .mode-toggle-bar {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-bottom: 20px;
+            background: var(--panel-bg);
+            padding: 8px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+        }
+
+        .mode-btn {
+            background: transparent;
+            border: none;
+            color: var(--text-muted);
+            padding: 8px 16px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .mode-btn.active {
+            background: var(--neon-blue);
+            color: #000;
+            box-shadow: 0 0 15px rgba(0, 242, 254, 0.4);
         }
 
         .day-selector {
             display: flex;
-            gap: 10px;
+            gap: 8px;
             overflow-x: auto;
             padding-bottom: 10px;
             margin-bottom: 20px;
         }
 
         .day-btn {
-            background: var(--card-bg);
-            color: var(--text-color);
-            border: 1px solid #334155;
-            padding: 10px 18px;
-            border-radius: 8px;
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            color: var(--text-main);
+            padding: 12px 20px;
+            border-radius: 10px;
+            font-weight: 700;
             cursor: pointer;
             white-space: nowrap;
             transition: all 0.2s ease;
         }
 
-        .day-btn.active, .day-btn:hover {
-            background: var(--accent);
-            color: #000;
-            font-weight: bold;
+        .day-btn.active {
+            border-color: var(--neon-blue);
+            background: rgba(0, 242, 254, 0.1);
+            color: var(--neon-blue);
+            box-shadow: 0 0 10px rgba(0, 242, 254, 0.2);
         }
 
-        .content-card {
-            background: var(--card-bg);
-            border-radius: 12px;
+        .card {
+            background: var(--panel-bg);
+            border: 1px solid var(--border-color);
+            border-radius: 14px;
             padding: 20px;
-            border: 1px solid #334155;
             margin-bottom: 20px;
+            backdrop-filter: blur(8px);
         }
 
-        .exercise-item {
+        .alert-banner {
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid var(--neon-red);
+            border-radius: 10px;
+            padding: 12px 16px;
+            margin-bottom: 20px;
             display: flex;
-            align-items: center;
             justify-content: space-between;
-            padding: 12px 0;
-            border-bottom: 1px solid #334155;
+            align-items: center;
         }
 
-        .exercise-item:last-child {
+        .penalty-btn {
+            background: var(--neon-red);
+            color: #fff;
+            border: none;
+            padding: 8px 14px;
+            border-radius: 6px;
+            font-weight: 700;
+            cursor: pointer;
+            transition: opacity 0.2s;
+        }
+
+        .penalty-btn:hover {
+            opacity: 0.9;
+        }
+
+        .exercise-row {
+            border-bottom: 1px solid var(--border-color);
+            padding: 15px 0;
+        }
+
+        .exercise-row:last-child {
             border-bottom: none;
         }
 
-        .checkbox-container {
+        .exercise-header {
             display: flex;
+            justify-content: space-between;
             align-items: center;
-            gap: 12px;
+        }
+
+        .exercise-info {
+            font-size: 0.85rem;
+            color: var(--text-muted);
+            margin-top: 6px;
+            line-height: 1.4;
+        }
+
+        .checkbox-custom {
+            width: 22px;
+            height: 22px;
+            accent-color: var(--neon-blue);
             cursor: pointer;
-        }
-
-        input[type="checkbox"] {
-            width: 20px;
-            height: 20px;
-            accent-color: var(--accent);
-            cursor: pointer;
-        }
-
-        .easter-egg-banner {
-            display: none;
-            background: linear-gradient(135deg, #f59e0b, #ef4444);
-            color: #fff;
-            padding: 15px;
-            border-radius: 10px;
-            text-align: center;
-            font-weight: bold;
-            margin-top: 20px;
-            animation: bounce 0.5s infinite alternate;
-        }
-
-        @keyframes bounce {
-            from { transform: translateY(0); }
-            to { transform: translateY(-5px); }
         }
     </style>
 </head>
@@ -139,27 +207,59 @@
 
 <div class="container">
     <header>
-        <h1 id="main-title" style="cursor: pointer;" title="Click 5 times for a secret!">💪 V-Taper Blueprint</h1>
-        <p style="color: var(--muted-text);">Cult Gym & Basketball Transformation Hub</p>
+        <h1 class="hero-title" id="app-title" style="cursor:pointer;">⚡ V-TAPER SYSTEM 365 ⚡</h1>
+        <p style="color: var(--text-muted); margin-top: 5px;">12-Month Progressive Overload & Aesthetic Engine</p>
     </header>
 
-    <!-- Gamification & Stats Bar -->
-    <div class="stats-bar">
-        <div class="stat-card">
-            <div>Current Level 🏆</div>
-            <div id="user-level" class="stat-value">Rookie</div>
-        </div>
-        <div class="stat-card">
-            <div>Total XP ⚡</div>
-            <div id="user-xp" class="stat-value">0 XP</div>
-        </div>
-        <div class="stat-card">
-            <div>Active Streak 🔥</div>
-            <div id="user-streak" class="stat-value">0 Days</div>
+    <!-- Goal & Intensity Banner -->
+    <div class="card" style="border-color: var(--neon-purple);">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <div>
+                <span style="color: var(--neon-purple); font-weight: 800;">CURRENT GOAL:</span>
+                <span id="goal-display">Phase 1 - Neural Adaptation & Lat Width Flare</span>
+            </div>
+            <button onclick="advanceWeek()" style="background: var(--border-color); color: #fff; border: none; padding: 6px 12px; border-radius: 6px; cursor: pointer;">Next Week ⏩</button>
         </div>
     </div>
 
-    <!-- Day Selector Tabs -->
+    <!-- Stats Dashboard -->
+    <div class="stats-grid">
+        <div class="stat-card">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">PROGRAM TIMELINE</div>
+            <div id="stat-week" class="stat-value">Week 1 / 52</div>
+        </div>
+        <div class="stat-card">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">TOTAL XP</div>
+            <div id="stat-xp" class="stat-value">0 XP</div>
+        </div>
+        <div class="stat-card">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">ACTIVE STREAK</div>
+            <div id="stat-streak" class="stat-value" style="color: var(--neon-green);">0 Days 🔥</div>
+        </div>
+        <div class="stat-card">
+            <div style="color: var(--text-muted); font-size: 0.8rem;">RANK LEVEL</div>
+            <div id="stat-level" class="stat-value" style="font-size: 1.1rem; color: var(--neon-purple);">Rookie</div>
+        </div>
+    </div>
+
+    <!-- Penalty Bar -->
+    <div class="alert-banner">
+        <div>
+            <strong>🚨 MISSED A SESSION TODAY?</strong>
+            <div style="font-size: 0.8rem; color: var(--text-muted);">Honesty policy: Logging a miss resets your streak and deducts 100 XP.</div>
+        </div>
+        <button class="penalty-btn" onclick="applyPenalty()">LOG MISSED DAY</button>
+    </div>
+
+    <!-- Location / Equipment Mode Toggle -->
+    <div class="mode-toggle-bar">
+        <span style="align-self: center; font-size: 0.85rem; font-weight: bold; margin-right: 10px;">VERSION:</span>
+        <button class="mode-btn active" id="btn-cult" onclick="setMode('cult')">Cult Gym</button>
+        <button class="mode-btn" id="btn-alt" onclick="setMode('alt')">Gym Alt</button>
+        <button class="mode-btn" id="btn-home" onclick="setMode('home')">Home Version</button>
+    </div>
+
+    <!-- Day Navigation -->
     <div class="day-selector">
         <button class="day-btn active" onclick="loadDay('Mon')">Mon (Upper)</button>
         <button class="day-btn" onclick="loadDay('Tue')">Tue (Lower)</button>
@@ -170,114 +270,228 @@
         <button class="day-btn" onclick="loadDay('Sun')">Sun (Hoops 🏀)</button>
     </div>
 
-    <!-- Dynamic Day Content -->
-    <div class="content-card">
-        <h2 id="day-title" style="color: var(--accent); margin-top: 0;">Monday: Upper Body</h2>
-        <div id="exercise-list"></div>
-    </div>
-
-    <!-- Easter Egg Unlock Popup -->
-    <div id="secret-banner" class="easter-egg-banner">
-        🎉 SECRET UNLOCKED: Golden Beast Mode Activated! (+500 Bonus XP)
+    <!-- Exercises & Details -->
+    <div class="card">
+        <h2 id="day-heading" style="margin-top: 0; color: var(--neon-blue);">Monday Protocol</h2>
+        <div id="exercise-container"></div>
     </div>
 </div>
 
 <script>
-    // App State stored in LocalStorage
-    let state = JSON.parse(localStorage.getItem('vTaperState')) || {
+    let state = JSON.parse(localStorage.getItem('vTaper365State')) || {
         xp: 0,
         streak: 0,
-        completed: {}
+        week: 1,
+        completed: {},
+        currentMode: 'cult'
     };
 
-    let titleClicks = 0;
-
-    const schedule = {
-        Mon: ["Incline DB Press (3 sets)", "Lat Pulldown (3 sets)", "Overhead DB Press (3 sets)", "Cable Row (3 sets)", "DB Lateral Raises (3 sets)", "☕ Morning Whey Cold Coffee Swap"],
-        Tue: ["Barbell / DB Squats (3 sets)", "Romanian Deadlifts (3 sets)", "Leg Extensions (3 sets)", "Seated Leg Curls (3 sets)", "Plank Hold (3 sets)", "🍎 Pre-Gym Healthy Snack"],
-        Wed: ["DB Incline Press (3 sets)", "Cable Lateral Raises (4 sets)", "Pec Deck Flyes (3 sets)", "Tricep Pushdowns (3 sets)", "Overhead Rope Extension (3 sets)", "🍵 Evening Green Tea Swap"],
-        Thu: ["Wide-Grip Lat Pulldown (4 sets)", "Seated Cable Row (3 sets)", "Face Pulls (3 sets)", "Incline DB Bicep Curls (3 sets)", "Hammer Curls (3 sets)", "🥛 Post-Gym Whey + Sprouts"],
-        Fri: ["Heavy Squats / Leg Press (4 sets)", "Hamstring Curls (3 sets)", "Walking DB Lunges (3 sets)", "Standing Calf Raises (4 sets)", "🍚 Pre-Workout Carb Meal"],
-        Sat: ["Basketball Session (7:00-9:00 AM 🏀)", "Court Agility & High Cardio", "🥤 Post-Game Electrolytes + Whey"],
-        Sun: ["Basketball Session (7:00-9:00 AM 🏀)", "Active Recovery & Mobility Work", "🥤 Post-Game Whey + Whole Fruit"]
+    const database = {
+        Mon: {
+            title: "Monday: Upper Body Compound",
+            items: [
+                {
+                    cult: "Incline DB Bench Press (3 Sets x 8-10 Reps)",
+                    alt: "Smith Machine Incline Press",
+                    home: "Decline Push-Ups (Feet Elevated)",
+                    info: "Targets upper chest. Maintain a 30-degree incline and squeeze at the top."
+                },
+                {
+                    cult: "Wide-Grip Lat Pulldown (3 Sets x 10-12 Reps)",
+                    alt: "Assisted Pull-Up Machine",
+                    home: "Inverted Rows under Table / Doorway Rows",
+                    info: "Primary V-Taper builder! Drive elbows down toward your hip bones."
+                },
+                {
+                    cult: "Overhead DB Shoulder Press (3 Sets x 8-10 Reps)",
+                    alt: "Seated Machine Shoulder Press",
+                    home: "Pike Push-Ups",
+                    info: "Builds clavicular width and shoulder girdle strength."
+                },
+                {
+                    cult: "☕ Morning Swap: Whey Cold Coffee",
+                    alt: "☕ Morning Swap: Black Coffee + Protein Shake",
+                    home: "☕ Morning Swap: Whey Cold Coffee",
+                    info: "Replaces high-sugar milk coffee. Delivers 25g fast-digesting protein."
+                }
+            ]
+        },
+        Tue: {
+            title: "Tuesday: Lower Body & Core",
+            items: [
+                {
+                    cult: "Barbell Squats / Hack Squats (3 Sets x 8-10 Reps)",
+                    alt: "Leg Press Machine",
+                    home: "Weighted Backpack Goblet Squats",
+                    info: "Builds quad volume and systemic leg strength for basketball power."
+                },
+                {
+                    cult: "Romanian Deadlifts (RDLs) (3 Sets x 10 Reps)",
+                    alt: "Smith Machine RDL",
+                    home: "Single-Leg Bodyweight RDLs",
+                    info: "Targets hamstrings and glutes while strengthening lower back posture."
+                }
+            ]
+        },
+        Wed: {
+            title: "Wednesday: Push & Lateral Width",
+            items: [
+                {
+                    cult: "Cable Lateral Raises (4 Sets x 12-15 Reps)",
+                    alt: "Dumbbell Side Raises",
+                    home: "Resistance Band Side Raises",
+                    info: "Crucial for capping side delts to broaden upper body proportions."
+                }
+            ]
+        },
+        Thu: {
+            title: "Thursday: Pull & Lat Expansion",
+            items: [
+                {
+                    cult: "Seated Cable Rows (3 Sets x 10-12 Reps)",
+                    alt: "Single-Arm DB Rows",
+                    home: "Resistance Band Rows",
+                    info: "Adds upper back thickness and lat flare."
+                }
+            ]
+        },
+        Fri: {
+            title: "Friday: Heavy Legs Routine",
+            items: [
+                {
+                    cult: "Heavy Leg Press (4 Sets x 8-10 Reps)",
+                    alt: "Barbell Back Squats",
+                    home: "Walking DB Lunges",
+                    info: "Maximum strength output before weekend recovery and basketball."
+                }
+            ]
+        },
+        Sat: {
+            title: "Saturday: Basketball & Agility",
+            items: [
+                {
+                    cult: "2 Hours Basketball (7:00 - 9:00 AM)",
+                    alt: "Court Agility Drills",
+                    home: "High-Intensity Jump Rope Circuit",
+                    info: "Burns midsection calories and builds fast-twitch explosive conditioning."
+                }
+            ]
+        },
+        Sun: {
+            title: "Sunday: Basketball & Active Recovery",
+            items: [
+                {
+                    cult: "2 Hours Basketball (7:00 - 9:00 AM)",
+                    alt: "Light Cardio & Full Body Stretch",
+                    home: "Foam Rolling & Mobility Circuit",
+                    info: "Promotes blood flow, flushes lactic acid, and improves flexibility."
+                }
+            ]
+        }
     };
 
-    let currentActiveDay = 'Mon';
+    let activeDay = 'Mon';
 
     function saveState() {
-        localStorage.setItem('vTaperState', JSON.stringify(state));
-        updateDashboard();
+        localStorage.setItem('vTaper365State', JSON.stringify(state));
+        renderDashboard();
     }
 
-    function updateDashboard() {
-        document.getElementById('user-xp').innerText = state.xp + " XP";
+    function renderDashboard() {
+        document.getElementById('stat-week').innerText = `Week ${state.week} / 52`;
+        document.getElementById('stat-xp').innerText = `${state.xp} XP`;
+        document.getElementById('stat-streak').innerText = `${state.streak} Days 🔥`;
         
-        // Calculate Level based on XP
-        let level = "Rookie";
-        if (state.xp >= 300) level = "V-Taper Novice 📐";
-        if (state.xp >= 800) level = "Lat Specialist 🦅";
-        if (state.xp >= 1500) level = "Sculpted Athlete 🏋️";
-        if (state.xp >= 3000) level = "V-Taper Master 👑";
-        document.getElementById('user-level').innerText = level;
+        let rank = "Rookie";
+        if (state.xp >= 400) rank = "Novice 📐";
+        if (state.xp >= 1200) rank = "Lat Specialist 🦅";
+        if (state.xp >= 2500) rank = "Pro Athlete 🏋️";
+        if (state.xp >= 5000) rank = "V-Taper Master 👑";
+        document.getElementById('stat-level').innerText = rank;
 
-        document.getElementById('user-streak').innerText = state.streak + " Days";
+        // Update Goal based on Week
+        if (state.week <= 4) {
+            document.getElementById('goal-display').innerText = "Phase 1 - Neural Adaptation & Lat Width Flare";
+        } else if (state.week <= 12) {
+            document.getElementById('goal-display').innerText = "Phase 2 - V-Taper Frame Expansion & Upper Chest Pop";
+        } else {
+            document.getElementById('goal-display').innerText = "Phase 3 - High-Definition Recomposition & Maximum Power";
+        }
+    }
+
+    function setMode(mode) {
+        state.currentMode = mode;
+        document.querySelectorAll('.mode-btn').forEach(b => b.classList.remove('active'));
+        document.getElementById(`btn-${mode}`).classList.add('active');
+        saveState();
+        loadDay(activeDay);
     }
 
     function loadDay(dayKey) {
-        currentActiveDay = dayKey;
-        
-        // Highlight active tab
+        activeDay = dayKey;
         document.querySelectorAll('.day-btn').forEach(btn => {
             btn.classList.toggle('active', btn.innerText.startsWith(dayKey));
         });
 
-        document.getElementById('day-title').innerText = dayKey + " Checklist";
-        const container = document.getElementById('exercise-list');
+        const dayData = database[dayKey];
+        document.getElementById('day-heading').innerText = dayData.title;
+
+        const container = document.getElementById('exercise-container');
         container.innerHTML = '';
 
-        schedule[dayKey].forEach((item, index) => {
-            const itemKey = dayKey + '_' + index;
-            const isChecked = state.completed[itemKey] || false;
+        dayData.items.forEach((item, index) => {
+            const key = `${dayKey}_w${state.week}_${index}`;
+            const isChecked = state.completed[key] || false;
+            const exerciseText = item[state.currentMode] || item.cult;
 
             const div = document.createElement('div');
-            div.className = 'exercise-item';
+            div.className = 'exercise-row';
             div.innerHTML = `
-                <label class="checkbox-container">
-                    <input type="checkbox" ${isChecked ? 'checked' : ''} onchange="toggleCheck('${itemKey}')">
-                    <span>${item}</span>
-                </label>
+                <div class="exercise-header">
+                    <label style="display:flex; align-items:center; gap:10px; cursor:pointer; font-weight:700;">
+                        <input type="checkbox" class="checkbox-custom" ${isChecked ? 'checked' : ''} onchange="toggleTask('${key}')">
+                        <span>${exerciseText}</span>
+                    </label>
+                </div>
+                <div class="exercise-info">💡 ${item.info}</div>
             `;
             container.appendChild(div);
         });
     }
 
-    function toggleCheck(itemKey) {
-        if (!state.completed[itemKey]) {
-            state.completed[itemKey] = true;
-            state.xp += 20; // Gain 20 XP per completed item
+    function toggleTask(key) {
+        if (!state.completed[key]) {
+            state.completed[key] = true;
+            state.xp += 25;
+            state.streak += 1;
         } else {
-            state.completed[itemKey] = false;
-            state.xp = Math.max(0, state.xp - 20);
+            state.completed[key] = false;
+            state.xp = Math.max(0, state.xp - 25);
+            state.streak = Math.max(0, state.streak - 1);
         }
         saveState();
     }
 
-    // Easter Egg: Tap title 5 times quickly
-    document.getElementById('main-title').addEventListener('click', () => {
-        titleClicks++;
-        if (titleClicks === 5) {
-            document.getElementById('secret-banner').style.display = 'block';
-            state.xp += 500;
+    function applyPenalty() {
+        if (confirm("Are you sure you want to log a missed session? This will deduct 100 XP and reset your active streak.")) {
+            state.xp = Math.max(0, state.xp - 100);
+            state.streak = 0;
             saveState();
-            setTimeout(() => {
-                document.getElementById('secret-banner').style.display = 'none';
-            }, 4000);
-            titleClicks = 0;
+            alert("Penalty Applied. Reset and regain focus for tomorrow!");
         }
-    });
+    }
 
-    // Initial Load
-    updateDashboard();
+    function advanceWeek() {
+        if (state.week < 52) {
+            state.week += 1;
+            saveState();
+            loadDay(activeDay);
+        }
+    }
+
+    // Initialize
+    setMode(state.currentMode || 'cult');
+    renderDashboard();
     loadDay('Mon');
 </script>
 </body>
