@@ -51,21 +51,45 @@
 
         .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
 
-        .stat-val { font-family: 'Orbitron', sans-serif; font-size: 1.4rem; color: var(--neon-blue); }
+        /* XP & Leveling Bar */
+        .xp-container { background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid var(--border-color); padding: 12px; margin-bottom: 20px; }
+        .xp-bar-bg { background: #1a2744; height: 16px; border-radius: 8px; overflow: hidden; margin-top: 6px; }
+        .xp-bar-fill { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: width 0.5s ease; }
 
         .timer-display { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: var(--neon-gold); text-align: center; margin: 10px 0; }
         .btn-timer { background: var(--neon-blue); color: #000; font-family: 'Orbitron', sans-serif; font-weight: 700; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; margin: 2px; }
 
         .nav-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 15px; }
-        .nav-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 700; }
+        .nav-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 700; white-space: nowrap; }
         .nav-btn.active { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 242, 254, 0.1); }
+
+        .phase-header { 
+            background: rgba(26, 39, 68, 0.6); 
+            border: 1px solid var(--border-color); 
+            border-radius: 10px; 
+            padding: 12px 16px; 
+            margin-top: 15px; 
+            cursor: pointer; 
+            display: flex; 
+            justify-content: space-between; 
+            align-items: center; 
+            font-family: 'Orbitron', sans-serif;
+            color: var(--neon-blue);
+        }
+        .phase-header.completed { border-color: var(--neon-green); color: var(--neon-green); }
+        .phase-content { padding: 10px 0; display: block; }
+        .phase-content.collapsed { display: none; }
 
         .exercise-item { background: rgba(10, 16, 28, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
         .ex-title { font-weight: 700; font-size: 1rem; color: var(--text-main); }
         .ex-info { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
 
-        input[type="number"], select { background: #000; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px; border-radius: 6px; font-family: 'Orbitron', sans-serif; width: 80px; text-align: center; }
-        canvas { max-height: 200px; }
+        /* Progression Modal */
+        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 7, 17, 0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
+        .modal-card { background: var(--panel-bg); border: 2px solid var(--neon-blue); border-radius: 16px; padding: 25px; max-width: 450px; width: 90%; text-align: center; }
+
+        input[type="number"] { background: #000; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px; border-radius: 6px; font-family: 'Orbitron', sans-serif; width: 80px; text-align: center; }
+        canvas { max-height: 220px; }
     </style>
 </head>
 <body>
@@ -78,6 +102,17 @@
             <button class="btn-reset" onclick="resetProgress()">🔄 RESET</button>
         </div>
     </header>
+
+    <!-- Gamified XP Profile Bar -->
+    <div class="xp-container">
+        <div style="display:flex; justify-content:space-between; align-items:center;">
+            <span style="font-family:'Orbitron'; color:var(--neon-gold); font-weight:700;" id="user-level">LEVEL 1 ATHLETE</span>
+            <span style="font-family:'Orbitron'; color:var(--neon-blue);" id="xp-text">0 / 350 XP</span>
+        </div>
+        <div class="xp-bar-bg">
+            <div class="xp-bar-fill" id="xp-fill"></div>
+        </div>
+    </div>
 
     <!-- Timer & Tracker Panel -->
     <div class="grid-2">
@@ -113,7 +148,7 @@
 
     <!-- Analytics Chart -->
     <div class="card">
-        <h3 style="margin:0 0 10px 0; font-family:'Orbitron'; color:var(--neon-blue);">📊 BODY FAT TREND LINE</h3>
+        <h3 style="margin:0 0 10px 0; font-family:'Orbitron'; color:var(--neon-blue);">📊 CUMULATIVE TRANSFORMATION TIMELINE</h3>
         <canvas id="bfChart"></canvas>
     </div>
 
@@ -141,77 +176,271 @@
     </div>
 </div>
 
+<!-- Progression Modal -->
+<div class="modal-overlay" id="progression-modal">
+    <div class="modal-card">
+        <h2 style="font-family:'Orbitron'; color:var(--neon-gold); margin-top:0;">🚀 CYCLE COMPLETE!</h2>
+        <p>You have completed a full 7-day training block. Double Progression algorithm suggests a <strong>+2 kg / +2 reps</strong> overload bump.</p>
+        <div style="margin:20px 0;">
+            <button class="btn-timer" style="width:100%; padding:12px; margin-bottom:10px; background:var(--neon-green);" onclick="acceptProgression()">ACCEPT & INCREASE LOAD (+2)</button>
+            <div style="margin-top:10px;">
+                <label style="font-size:0.85rem;">Defer Progression (Days):</label>
+                <input type="number" id="defer-days" min="1" max="7" value="3">
+                <button class="btn-timer" style="background:var(--neon-purple); color:#fff; margin-top:5px;" onclick="deferProgression()">DEFER INCREASE</button>
+            </div>
+        </div>
+    </div>
+</div>
+
 <script>
     const defaultState = {
         weight: 78,
         bf: 18,
         completed: {},
-        loggedDays: [],
-        bfHistory: [20, 19.5, 19, 18.5, 18],
-        rpeLogs: {}
+        bfHistory: [18.0],
+        labelsHistory: ['Day 1'],
+        rpeLogs: {},
+        collapsedPhases: {},
+        xp: 0,
+        completedDaysCount: 0,
+        progressionOffset: 0,
+        progressionDeferredUntil: null
     };
 
-    let state = JSON.parse(localStorage.getItem('vTaper365_v4')) || defaultState;
+    let state = JSON.parse(localStorage.getItem('vTaper365_v6')) || defaultState;
     let timerInterval = null;
     let chartInstance = null;
 
     const workoutPlan = {
         Mon: {
-            title: "Monday: Arms + Triceps (High-Intensity Supersets)",
-            items: [
-                { name: "SUPERSET 1: Machine Tricep Extension + Diamond Push-ups", info: "3 Sets x 10-12 reps each. Minimal rest between exercises." },
-                { name: "SUPERSET 2: Close-Grip Push-ups + Dips", info: "3 Sets x 10 reps to failure." },
-                { name: "SUPERSET 3: Pike Push-ups + Planch Hold / Power Push-ups", info: "3 Sets x 8-10 reps + 30s hold." },
-                { name: "FINISHER: 3-Min Dumbbell Arm Complex", info: "Non-stop DB Hex Press, DB Tricep Extensions, and DB Kickbacks." }
+            title: "Monday: Arms + Triceps",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Treadmill / Incline Walk", info: "5-10 Minutes to raise core body temp." },
+                        { name: "Dynamic Arm & Shoulder Swings", info: "2 Sets x 15 reps each direction." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Machine Tricep Ext + Diamond Push-ups", info: "3 Sets x 10-12 reps." },
+                        { name: "SUPERSET 2: DB Overhead Extension + Close-Grip Push-ups", info: "3 Sets x 10-12 reps." },
+                        { name: "SUPERSET 3: DB French Press + Dips to Failure", info: "3 Sets to muscle burnout." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min DB Arm Complex", info: "Non-stop DB Hex Press, DB Tricep Extensions, and DB Kickbacks." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Overhead Tricep Stretch", info: "Hold 30s per arm." },
+                        { name: "Cross-Body Shoulder Stretch", info: "Hold 30s per arm." }
+                    ]
+                }
             ]
         },
         Tue: {
-            title: "Tuesday: Biceps + Chest (Hybrid Power)",
-            items: [
-                { name: "SUPERSET 1: Machine Chest Press + Clap Push-ups", info: "3 Sets x 10 reps." },
-                { name: "SUPERSET 2: Incline DB Press + DB Bicep Curls", info: "3 Sets x 10-12 reps." },
-                { name: "SUPERSET 3: Bodyweight Dips + Diamond Push-ups", info: "3 Sets to muscle burnout." },
-                { name: "FINISHER: 3-Min DB Chest Flye & Bicep Curl Burnout", info: "Light DBs, maximum reps until failure." }
+            title: "Tuesday: Biceps + Chest",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Jumping Jacks + Arm Circles", info: "3 Rounds x 45s work / 15s rest." },
+                        { name: "Band Pull-Aparts / Light Flyes", info: "2 Sets x 15 reps." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Machine Chest Press + Clap Push-ups", info: "3 Sets x 10 reps." },
+                        { name: "SUPERSET 2: Incline DB Press + DB Bicep Curls", info: "3 Sets x 10-12 reps." },
+                        { name: "SUPERSET 3: Bodyweight Dips + Diamond Push-ups", info: "3 Sets to burnout." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min DB Chest Flye & Bicep Curl Burnout", info: "Continuous light DB work until failure." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Doorway Chest Stretch", info: "Hold 45s." },
+                        { name: "Bicep Wall Stretch", info: "Hold 30s per side." }
+                    ]
+                }
             ]
         },
         Wed: {
-            title: "Wednesday: Forearms + Abs (Core Conditioning)",
-            items: [
-                { name: "SUPERSET 1: Wrist Gripper Work + Dragon Fly / Leg Lifts", info: "4 Sets x 15 reps." },
-                { name: "SUPERSET 2: Windshield Wipers + Russian Twists", info: "3 Sets x 15-20 reps." },
-                { name: "CIRCUIT: Burpees + L-Sit Hold", info: "3 Rounds x 15 Burpees + 30s L-Sit." }
+            title: "Wednesday: Forearms + Abs",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Rowing Machine / Cross Trainer", info: "5-10 Minutes continuous pulse." },
+                        { name: "Cat-Camel & Torso Rotations", info: "2 Sets x 10 reps." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Wrist Grippers + Dragon Fly / Leg Lifts", info: "4 Sets x 15 reps." },
+                        { name: "SUPERSET 2: Windshield Wipers + Russian Twists", info: "3 Sets x 15-20 reps." },
+                        { name: "SUPERSET 3: Heavy DB Wrist Curls + Plank Hold", info: "3 Sets x 15 reps + 60s Plank." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min Burpee & DB Farmer Hold Sprints", info: "Max reps burpees with heavy DB holds." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Cobra Stretch", info: "Hold 45s for abdominal wall extension." },
+                        { name: "Wrist Extensor & Flexor Stretches", info: "Hold 30s per arm." }
+                    ]
+                }
             ]
         },
         Thu: {
-            title: "Thursday: Arms + Triceps (Density Focus)",
-            items: [
-                { name: "SUPERSET 1: Machine Seated Rows + DB Lateral Raises", info: "3 Sets x 12 reps (Joint balance & shoulder width)." },
-                { name: "SUPERSET 2: DB Overhead Tricep Extension + One-Arm Push-ups", info: "3 Sets x 8-10 reps." },
-                { name: "FINISHER: High Plank & Shoulder Taps Circuit", info: "3 Rounds x 45s work / 15s rest." }
+            title: "Thursday: Arms + Triceps",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Jump Rope / Shadow Boxing", info: "5 Minutes continuous pulse." },
+                        { name: "Scapular Push-ups", info: "2 Sets x 12 reps." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Machine Seated Rows + DB Lateral Raises", info: "3 Sets x 12 reps (Joint balance & posture)." },
+                        { name: "SUPERSET 2: DB Overhead Tricep Ext + One-Arm Push-ups", info: "3 Sets x 8-10 reps." },
+                        { name: "SUPERSET 3: DB Hammer Curls + Tricep Dips", info: "3 Sets x 12 reps." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min DB Renegade Row & Press Complex", info: "Non-stop alternating DB rows and overhead presses." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Child's Pose with Arm Reach", info: "Hold 60s." },
+                        { name: "Tricep Wall Stretch", info: "Hold 30s per arm." }
+                    ]
+                }
             ]
         },
         Fri: {
-            title: "Friday: Biceps + Chest (Hypertrophy)",
-            items: [
-                { name: "SUPERSET 1: Machine Chest Flyes + Flying Incline Push-ups", info: "3 Sets x 10 reps." },
-                { name: "SUPERSET 2: DB Hammer Curls + Reverse Push-ups", info: "3 Sets x 12 reps." },
-                { name: "FINISHER: 3-Min DB Renegade Row & Push-up Complex", info: "Non-stop alternating DB rows and push-ups." }
+            title: "Friday: Biceps + Chest",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Treadmill Sprints (15s on / 15s off)", info: "5 Minutes total duration." },
+                        { name: "Dynamic Chest Flyes", info: "2 Sets x 15 reps." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Machine Chest Flyes + Flying Incline Push-ups", info: "3 Sets x 10 reps." },
+                        { name: "SUPERSET 2: DB Preacher Curls + Reverse Push-ups", info: "3 Sets x 12 reps." },
+                        { name: "SUPERSET 3: Wide-Arm Push-ups + DB Concentration Curls", info: "3 Sets to burnout." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min DB Push-up to Curl Burnout", info: "Continuous DB push-ups into standing curls." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Pectoral Wall Stretch", info: "Hold 45s each side." },
+                        { name: "Seated Bicep Stretch", info: "Hold 45s." }
+                    ]
+                }
             ]
         },
         Sat: {
-            title: "Saturday: Forearm + Chest (Chest Density)",
-            items: [
-                { name: "SUPERSET 1: Heavy DB Bench Press + Archer Push-ups", info: "3 Sets x 8-10 reps." },
-                { name: "SUPERSET 2: Gripper Hold + Wide-Arm Push-ups", info: "3 Sets x Max reps." },
-                { name: "CARDIO CIRCUIT: Side-to-Side Shuffle + Stepping Sprawls", info: "4 Rounds x 30s each." }
+            title: "Saturday: Forearm + Chest",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Agility Ladder / Side Shuffles", info: "5 Minutes dynamic movement." },
+                        { name: "Wrist Rotations & Push-up Prep", info: "2 Sets x 15 reps." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Heavy DB Bench Press + Archer Push-ups", info: "3 Sets x 8-10 reps." },
+                        { name: "SUPERSET 2: Gripper Hold + Wide-Arm Push-ups", info: "3 Sets x Max reps." },
+                        { name: "SUPERSET 3: DB Reverse Wrist Curls + Pushaway Push-ups", info: "3 Sets x 15 reps." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min DB Floor Press & Plank Hold", info: "Alternating 30s DB Press / 30s High Plank." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Thread the Needle Stretch", info: "Hold 45s per side." },
+                        { name: "Forearm Flexor Release", info: "Hold 30s per arm." }
+                    ]
+                }
             ]
         },
         Sun: {
-            title: "Sunday: Abs + Legs (Lower Body Conditioning)",
-            items: [
-                { name: "SUPERSET 1: Leg Press / DB Squats + Pistol Squats", info: "3 Sets x 10 reps per leg." },
-                { name: "SUPERSET 2: Machine Leg Extensions + Jump Squats", info: "3 Sets x 12 reps." },
-                { name: "FINISHER: Calf Raises + Wall Sit Hold", info: "3 Sets x 20 Calf Raises + 1-Min Wall Sit." }
+            title: "Sunday: Abs + Legs",
+            phases: [
+                {
+                    name: "🔥 Warmup Circuit",
+                    items: [
+                        { name: "Stationary Bike / High Knees", info: "5-10 Minutes leg activation." },
+                        { name: "Bodyweight Air Squats & Leg Swings", info: "2 Sets x 15 reps." }
+                    ]
+                },
+                {
+                    name: "⚡ High-Intensity Supersets",
+                    items: [
+                        { name: "SUPERSET 1: Leg Press / Heavy DB Squats + Pistol Squats", info: "3 Sets x 10 reps per leg." },
+                        { name: "SUPERSET 2: Machine Leg Extensions + Jump Squats", info: "3 Sets x 12 reps." },
+                        { name: "SUPERSET 3: DB Goblet Squats + Hanging Leg Raises", info: "3 Sets x 12 reps." }
+                    ]
+                },
+                {
+                    name: "🏋️ Dumbbell Finisher",
+                    items: [
+                        { name: "3-Min DB Thruster & Jump Squat Complex", info: "Non-stop metabolic leg burnout." }
+                    ]
+                },
+                {
+                    name: "🧘 Cool-Down Stretches",
+                    items: [
+                        { name: "Standing Quad Stretch", info: "Hold 45s per leg." },
+                        { name: "Seated Hamstring & Calf Stretch", info: "Hold 45s." }
+                    ]
+                }
             ]
         }
     };
@@ -219,14 +448,30 @@
     let activeDay = 'Mon';
 
     function saveState() {
-        localStorage.setItem('vTaper365_v4', JSON.stringify(state));
+        localStorage.setItem('vTaper365_v6', JSON.stringify(state));
     }
 
     function resetProgress() {
         if (confirm("Reset all tracked data back to default?")) {
-            localStorage.removeItem('vTaper365_v4');
+            localStorage.removeItem('vTaper365_v6');
             location.reload();
         }
+    }
+
+    function updateXPDisplay() {
+        const level = Math.floor(state.xp / 350) + 1;
+        const currentXP = state.xp % 350;
+        const fillPct = (currentXP / 350) * 100;
+
+        document.getElementById('user-level').innerText = `LEVEL ${level} ATHLETE`;
+        document.getElementById('xp-text').innerText = `${currentXP} / 350 XP`;
+        document.getElementById('xp-fill').style.width = `${fillPct}%`;
+    }
+
+    function addXP(amount) {
+        state.xp += amount;
+        saveState();
+        updateXPDisplay();
     }
 
     function startTimer(seconds) {
@@ -258,8 +503,10 @@
         state.weight = parseFloat(document.getElementById('input-weight').value) || 78;
         const newBf = parseFloat(document.getElementById('input-bf').value) || 18;
         state.bf = newBf;
+        
         state.bfHistory.push(newBf);
-        if (state.bfHistory.length > 7) state.bfHistory.shift();
+        state.labelsHistory.push(`Log ${state.bfHistory.length}`);
+        
         saveState();
         updateChart();
     }
@@ -269,7 +516,7 @@
         chartInstance = new Chart(ctx, {
             type: 'line',
             data: {
-                labels: ['Log 1', 'Log 2', 'Log 3', 'Log 4', 'Log 5', 'Log 6', 'Current'],
+                labels: state.labelsHistory,
                 datasets: [{
                     label: 'Body Fat %',
                     data: state.bfHistory,
@@ -292,6 +539,7 @@
 
     function updateChart() {
         if (chartInstance) {
+            chartInstance.data.labels = state.labelsHistory;
             chartInstance.data.datasets[0].data = state.bfHistory;
             chartInstance.update();
         }
@@ -310,25 +558,108 @@
         const container = document.getElementById('exercise-list');
         container.innerHTML = '';
 
-        data.items.forEach((item, idx) => {
-            const key = `${dayKey}_${idx}`;
-            const checked = state.completed[key] || false;
-            const div = document.createElement('div');
-            div.className = 'exercise-item';
-            div.innerHTML = `
-                <div style="display:flex; align-items:center; gap:10px;">
-                    <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${key}')" style="width:20px; height:20px;">
-                    <span class="ex-title">${item.name}</span>
-                </div>
-                <div class="ex-info">💡 ${item.info}</div>
+        data.phases.forEach((phase, pIdx) => {
+            const phaseKey = `${dayKey}_p${pIdx}`;
+            const allChecked = phase.items.every((_, iIdx) => state.completed[`${phaseKey}_i${iIdx}`]);
+            
+            let isCollapsed = state.collapsedPhases[phaseKey];
+            if (isCollapsed === undefined) {
+                isCollapsed = allChecked;
+            }
+
+            const header = document.createElement('div');
+            header.className = `phase-header ${allChecked ? 'completed' : ''}`;
+            header.innerHTML = `
+                <span>${phase.name} ${allChecked ? '✓' : ''}</span>
+                <span>${isCollapsed ? '► OPEN' : '▼ HIDE'}</span>
             `;
-            container.appendChild(div);
+            header.onclick = () => togglePhase(phaseKey);
+
+            const content = document.createElement('div');
+            content.className = `phase-content ${isCollapsed ? 'collapsed' : ''}`;
+
+            phase.items.forEach((item, iIdx) => {
+                const itemKey = `${phaseKey}_i${iIdx}`;
+                const checked = state.completed[itemKey] || false;
+                
+                const div = document.createElement('div');
+                div.className = 'exercise-item';
+                div.innerHTML = `
+                    <div style="display:flex; align-items:center; gap:10px;">
+                        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${itemKey}', '${phaseKey}', ${phase.items.length})" style="width:20px; height:20px;">
+                        <span class="ex-title">${item.name}</span>
+                    </div>
+                    <div class="ex-info">💡 ${item.info}</div>
+                `;
+                content.appendChild(div);
+            });
+
+            container.appendChild(header);
+            container.appendChild(content);
         });
     }
 
-    function toggleCheck(key) {
-        state.completed[key] = !state.completed[key];
+    function togglePhase(phaseKey) {
+        state.collapsedPhases[phaseKey] = !state.collapsedPhases[phaseKey];
         saveState();
+        loadDay(activeDay);
+    }
+
+    function checkDayCompletion() {
+        const data = workoutPlan[activeDay];
+        let totalItems = 0;
+        let checkedItems = 0;
+
+        data.phases.forEach((phase, pIdx) => {
+            phase.items.forEach((_, iIdx) => {
+                totalItems++;
+                if (state.completed[`${activeDay}_p${pIdx}_i${iIdx}`]) checkedItems++;
+            });
+        });
+
+        if (totalItems > 0 && checkedItems === totalItems && !state.completed[`dayDone_${activeDay}`]) {
+            state.completed[`dayDone_${activeDay}`] = true;
+            state.completedDaysCount++;
+            addXP(50); // Flat 50 XP award per completed day protocol
+            
+            if (state.completedDaysCount % 7 === 0) {
+                document.getElementById('progression-modal').style.display = 'flex';
+            }
+        }
+    }
+
+    function acceptProgression() {
+        state.progressionOffset += 2;
+        document.getElementById('progression-modal').style.display = 'none';
+        saveState();
+        alert("💪 Progression Applied! Target workloads increased by +2.");
+    }
+
+    function deferProgression() {
+        const days = parseInt(document.getElementById('defer-days').value) || 3;
+        state.progressionDeferredUntil = Date.now() + (days * 24 * 60 * 60 * 1000);
+        document.getElementById('progression-modal').style.display = 'none';
+        saveState();
+        alert(`⏱️ Progression deferred for ${days} days.`);
+    }
+
+    function toggleCheck(itemKey, phaseKey, totalItemsInPhase) {
+        state.completed[itemKey] = !state.completed[itemKey];
+        
+        let checkedCount = 0;
+        for (let i = 0; i < totalItemsInPhase; i++) {
+            if (state.completed[`${phaseKey}_i${i}`]) checkedCount++;
+        }
+
+        if (checkedCount === totalItemsInPhase) {
+            state.collapsedPhases[phaseKey] = true;
+        } else if (checkedCount === totalItemsInPhase - 1 && !state.completed[itemKey]) {
+            state.collapsedPhases[phaseKey] = false;
+        }
+
+        checkDayCompletion();
+        saveState();
+        loadDay(activeDay);
     }
 
     function saveRPE() {
@@ -340,6 +671,7 @@
     window.onload = () => {
         document.getElementById('input-weight').value = state.weight;
         document.getElementById('input-bf').value = state.bf;
+        updateXPDisplay();
         initChart();
         loadDay('Mon');
     };
