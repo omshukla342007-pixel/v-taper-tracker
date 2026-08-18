@@ -1,682 +1,598 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>⚡ V-TAPER SYSTEM 365 // CYBER-ATHLETE SUITE</title>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>6-Day Fat Loss & Muscle Building Routine</title>
+  <style>
+    :root {
+      --primary: #2563eb;
+      --primary-hover: #1d4ed8;
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --text: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent: #f59e0b;
+      --border: #334155;
+    }
 
-    <link rel="manifest" href='data:application/manifest+json,{"name":"V-Taper System 365","short_name":"V-Taper","start_url":".","display":"standalone","background_color":"#060913","theme_color":"#00f2fe","icons":[{"src":"https://img.icons8.com/neon/192/000000/dumbbell.png","sizes":"192x192","type":"image/png"}]}'>
-    <meta name="theme-color" content="#00f2fe">
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    }
 
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      line-height: 1.6;
+      padding: 20px;
+    }
 
-    <style>
-        @import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@500;700;900&family=Rajdhani:wght@500;600;700&display=swap');
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
 
-        :root {
-            --bg-color: #040711;
-            --panel-bg: rgba(13, 20, 36, 0.88);
-            --border-color: #1a2744;
-            --neon-blue: #00f2fe;
-            --neon-purple: #9d4edd;
-            --neon-pink: #ff007f;
-            --neon-red: #ff2a5f;
-            --neon-green: #00ffaa;
-            --neon-gold: #ffb703;
-            --text-main: #f8fafc;
-            --text-muted: #64748b;
-        }
+    header {
+      text-align: center;
+      margin-bottom: 30px;
+    }
 
-        * { box-sizing: border-box; transition: all 0.25s ease; }
+    header h1 {
+      font-size: 2rem;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
 
-        body {
-            font-family: 'Rajdhani', sans-serif;
-            background-color: var(--bg-color);
-            background-image: 
-                radial-gradient(circle at 50% 0%, rgba(0, 242, 254, 0.15) 0%, transparent 50%),
-                radial-gradient(circle at 100% 100%, rgba(157, 78, 221, 0.1) 0%, transparent 40%);
-            color: var(--text-main);
-            margin: 0; padding: 15px;
-            display: flex; justify-content: center; min-height: 100vh;
-        }
+    header p {
+      color: var(--text-muted);
+    }
 
-        .container { max-width: 960px; width: 100%; }
+    .day-selector {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 24px;
+      justify-content: center;
+    }
 
-        header { text-align: center; padding: 15px 0; border-bottom: 2px solid var(--border-color); margin-bottom: 20px; }
-        .header-top { display: flex; justify-content: space-between; align-items: center; }
-        .hero-title { font-family: 'Orbitron', sans-serif; font-size: 2rem; color: var(--neon-blue); margin: 0; }
-        .btn-reset { background: rgba(255, 42, 95, 0.2); border: 1px solid var(--neon-red); color: var(--neon-red); padding: 6px 12px; border-radius: 8px; cursor: pointer; font-family: 'Orbitron', sans-serif;}
+    .day-btn {
+      background-color: var(--card-bg);
+      color: var(--text);
+      border: 1px solid var(--border);
+      padding: 10px 16px;
+      border-radius: 8px;
+      cursor: pointer;
+      font-weight: 600;
+      transition: all 0.2s ease;
+    }
 
-        .card { background: var(--panel-bg); border: 1px solid var(--border-color); border-radius: 16px; padding: 20px; margin-bottom: 20px; }
+    .day-btn:hover {
+      background-color: var(--border);
+    }
 
-        .grid-2 { display: grid; grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); gap: 15px; }
+    .day-btn.active {
+      background-color: var(--primary);
+      border-color: var(--primary);
+    }
 
-        /* XP & Leveling Bar */
-        .xp-container { background: rgba(0,0,0,0.5); border-radius: 10px; border: 1px solid var(--border-color); padding: 12px; margin-bottom: 20px; }
-        .xp-bar-bg { background: #1a2744; height: 16px; border-radius: 8px; overflow: hidden; margin-top: 6px; }
-        .xp-bar-fill { background: linear-gradient(90deg, var(--neon-blue), var(--neon-purple)); height: 100%; width: 0%; transition: width 0.5s ease; }
+    .workout-card {
+      background-color: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      padding: 24px;
+      box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    }
 
-        .timer-display { font-family: 'Orbitron', sans-serif; font-size: 2.5rem; color: var(--neon-gold); text-align: center; margin: 10px 0; }
-        .btn-timer { background: var(--neon-blue); color: #000; font-family: 'Orbitron', sans-serif; font-weight: 700; border: none; padding: 8px 16px; border-radius: 8px; cursor: pointer; margin: 2px; }
+    .workout-header {
+      border-bottom: 1px solid var(--border);
+      padding-bottom: 16px;
+      margin-bottom: 20px;
+    }
 
-        .nav-bar { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 8px; margin-bottom: 15px; }
-        .nav-btn { background: var(--panel-bg); border: 1px solid var(--border-color); color: var(--text-main); padding: 8px 14px; border-radius: 8px; cursor: pointer; font-weight: 700; white-space: nowrap; }
-        .nav-btn.active { border-color: var(--neon-blue); color: var(--neon-blue); background: rgba(0, 242, 254, 0.1); }
+    .workout-header h2 {
+      font-size: 1.5rem;
+      color: #ffffff;
+    }
 
-        .phase-header { 
-            background: rgba(26, 39, 68, 0.6); 
-            border: 1px solid var(--border-color); 
-            border-radius: 10px; 
-            padding: 12px 16px; 
-            margin-top: 15px; 
-            cursor: pointer; 
-            display: flex; 
-            justify-content: space-between; 
-            align-items: center; 
-            font-family: 'Orbitron', sans-serif;
-            color: var(--neon-blue);
-        }
-        .phase-header.completed { border-color: var(--neon-green); color: var(--neon-green); }
-        .phase-content { padding: 10px 0; display: block; }
-        .phase-content.collapsed { display: none; }
+    .workout-header .meta {
+      display: flex;
+      gap: 16px;
+      margin-top: 8px;
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
 
-        .exercise-item { background: rgba(10, 16, 28, 0.6); border: 1px solid var(--border-color); border-radius: 10px; padding: 12px; margin-bottom: 10px; }
-        .ex-title { font-weight: 700; font-size: 1rem; color: var(--text-main); }
-        .ex-info { color: var(--text-muted); font-size: 0.85rem; margin-top: 4px; }
+    .section-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--accent);
+      margin: 20px 0 10px 0;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+    }
 
-        /* Progression Modal */
-        .modal-overlay { position: fixed; top: 0; left: 0; width: 100%; height: 100%; background: rgba(4, 7, 17, 0.9); display: none; justify-content: center; align-items: center; z-index: 1000; }
-        .modal-card { background: var(--panel-bg); border: 2px solid var(--neon-blue); border-radius: 16px; padding: 25px; max-width: 450px; width: 90%; text-align: center; }
+    .exercise-list {
+      list-style: none;
+    }
 
-        input[type="number"] { background: #000; border: 1px solid var(--neon-blue); color: var(--neon-blue); padding: 6px; border-radius: 6px; font-family: 'Orbitron', sans-serif; width: 80px; text-align: center; }
-        canvas { max-height: 220px; }
-    </style>
+    .superset-block {
+      background-color: rgba(15, 23, 42, 0.5);
+      border: 1px solid var(--border);
+      border-radius: 8px;
+      padding: 16px;
+      margin-bottom: 16px;
+    }
+
+    .superset-title {
+      font-weight: 700;
+      color: var(--primary);
+      margin-bottom: 8px;
+      font-size: 1rem;
+    }
+
+    .exercise-item {
+      padding: 8px 0;
+      border-bottom: 1px solid rgba(51, 65, 85, 0.5);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .exercise-item:last-child {
+      border-bottom: none;
+    }
+
+    .exercise-name {
+      font-weight: 600;
+    }
+
+    .exercise-details {
+      color: var(--text-muted);
+      font-size: 0.9rem;
+    }
+
+    .rest-note {
+      font-size: 0.85rem;
+      color: var(--accent);
+      margin-top: 8px;
+      font-style: italic;
+    }
+
+    .stretches-list, .warmup-list {
+      list-style: disc;
+      padding-left: 20px;
+      color: var(--text-muted);
+    }
+
+    .warmup-list li, .stretches-list li {
+      margin-bottom: 6px;
+    }
+  </style>
 </head>
 <body>
 
 <div class="container">
-    <header>
-        <div class="header-top">
-            <div style="width: 80px;"></div>
-            <h1 class="hero-title">⚡ V-TAPER 365 ⚡</h1>
-            <button class="btn-reset" onclick="resetProgress()">🔄 RESET</button>
-        </div>
-    </header>
+  <header>
+    <h1>🔥 6-Day Custom Workout Plan</h1>
+    <p>4 Upper Body Focus | 2 Lower Body & Agility | 1 Rest Day | 60–90 Mins</p>
+  </header>
 
-    <!-- Gamified XP Profile Bar -->
-    <div class="xp-container">
-        <div style="display:flex; justify-content:space-between; align-items:center;">
-            <span style="font-family:'Orbitron'; color:var(--neon-gold); font-weight:700;" id="user-level">LEVEL 1 ATHLETE</span>
-            <span style="font-family:'Orbitron'; color:var(--neon-blue);" id="xp-text">0 / 350 XP</span>
-        </div>
-        <div class="xp-bar-bg">
-            <div class="xp-bar-fill" id="xp-fill"></div>
-        </div>
-    </div>
+  <div class="day-selector" id="daySelector">
+    <button class="day-btn active" onclick="showDay(1)">Day 1</button>
+    <button class="day-btn" onclick="showDay(2)">Day 2</button>
+    <button class="day-btn" onclick="showDay(3)">Day 3</button>
+    <button class="day-btn" onclick="showDay(4)">Day 4</button>
+    <button class="day-btn" onclick="showDay(5)">Day 5</button>
+    <button class="day-btn" onclick="showDay(6)">Day 6</button>
+    <button class="day-btn" onclick="showDay(7)">Day 7</button>
+  </div>
 
-    <!-- Timer & Tracker Panel -->
-    <div class="grid-2">
-        <!-- Rest Timer -->
-        <div class="card">
-            <h3 style="margin:0; font-family:'Orbitron'; color:var(--neon-gold);">⏱️ SUPERSET REST TIMER</h3>
-            <div id="timer" class="timer-display">00:45</div>
-            <div style="text-align:center;">
-                <button class="btn-timer" onclick="startTimer(30)">30 SEC</button>
-                <button class="btn-timer" onclick="startTimer(45)">45 SEC</button>
-                <button class="btn-timer" style="background:var(--neon-red); color:#fff;" onclick="stopTimer()">STOP</button>
-            </div>
-        </div>
-
-        <!-- Body Fat & Weight Tracker -->
-        <div class="card">
-            <h3 style="margin:0; font-family:'Orbitron'; color:var(--neon-green);">📈 BODY FAT & WEIGHT LOG</h3>
-            <div style="display:flex; justify-content:space-between; align-items:center; margin-top:15px;">
-                <div>
-                    <label style="font-size:0.85rem;">Weight (kg):</label>
-                    <input type="number" id="input-weight" value="78" onchange="logMetrics()">
-                </div>
-                <div>
-                    <label style="font-size:0.85rem;">Body Fat (%):</label>
-                    <input type="number" id="input-bf" value="18" onchange="logMetrics()">
-                </div>
-            </div>
-            <div style="margin-top:10px; font-size:0.9rem;">
-                Target: <strong style="color:var(--neon-green);">< 13% Body Fat</strong>
-            </div>
-        </div>
-    </div>
-
-    <!-- Analytics Chart -->
-    <div class="card">
-        <h3 style="margin:0 0 10px 0; font-family:'Orbitron'; color:var(--neon-blue);">📊 CUMULATIVE TRANSFORMATION TIMELINE</h3>
-        <canvas id="bfChart"></canvas>
-    </div>
-
-    <!-- Day Selector -->
-    <div class="nav-bar">
-        <button class="nav-btn active" onclick="loadDay('Mon')">Mon (Arms/Tri)</button>
-        <button class="nav-btn" onclick="loadDay('Tue')">Tue (Biceps/Chest)</button>
-        <button class="nav-btn" onclick="loadDay('Wed')">Wed (Forearm/Abs)</button>
-        <button class="nav-btn" onclick="loadDay('Thu')">Thu (Arms/Tri)</button>
-        <button class="nav-btn" onclick="loadDay('Fri')">Fri (Biceps/Chest)</button>
-        <button class="nav-btn" onclick="loadDay('Sat')">Sat (Forearm/Chest)</button>
-        <button class="nav-btn" onclick="loadDay('Sun')">Sun (Abs/Legs)</button>
-    </div>
-
-    <!-- Workout Protocol Checklist -->
-    <div class="card">
-        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; margin-bottom:15px;">
-            <h2 id="day-title" style="margin:0; font-family:'Orbitron'; color:var(--neon-blue);">Monday Protocol</h2>
-            <div>
-                <label style="font-size:0.85rem; font-weight:700;">Effort Rating (RPE 1-10):</label>
-                <input type="number" id="rpe-input" min="1" max="10" value="8" onchange="saveRPE()">
-            </div>
-        </div>
-        <div id="exercise-list"></div>
-    </div>
-</div>
-
-<!-- Progression Modal -->
-<div class="modal-overlay" id="progression-modal">
-    <div class="modal-card">
-        <h2 style="font-family:'Orbitron'; color:var(--neon-gold); margin-top:0;">🚀 CYCLE COMPLETE!</h2>
-        <p>You have completed a full 7-day training block. Double Progression algorithm suggests a <strong>+2 kg / +2 reps</strong> overload bump.</p>
-        <div style="margin:20px 0;">
-            <button class="btn-timer" style="width:100%; padding:12px; margin-bottom:10px; background:var(--neon-green);" onclick="acceptProgression()">ACCEPT & INCREASE LOAD (+2)</button>
-            <div style="margin-top:10px;">
-                <label style="font-size:0.85rem;">Defer Progression (Days):</label>
-                <input type="number" id="defer-days" min="1" max="7" value="3">
-                <button class="btn-timer" style="background:var(--neon-purple); color:#fff; margin-top:5px;" onclick="deferProgression()">DEFER INCREASE</button>
-            </div>
-        </div>
-    </div>
+  <div class="workout-card" id="workoutContent">
+    <!-- Dynamic Content Injected Here -->
+  </div>
 </div>
 
 <script>
-    const defaultState = {
-        weight: 78,
-        bf: 18,
-        completed: {},
-        bfHistory: [18.0],
-        labelsHistory: ['Day 1'],
-        rpeLogs: {},
-        collapsedPhases: {},
-        xp: 0,
-        completedDaysCount: 0,
-        progressionOffset: 0,
-        progressionDeferredUntil: null
-    };
-
-    let state = JSON.parse(localStorage.getItem('vTaper365_v6')) || defaultState;
-    let timerInterval = null;
-    let chartInstance = null;
-
-    const workoutPlan = {
-        Mon: {
-            title: "Monday: Arms + Triceps",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Treadmill / Incline Walk", info: "5-10 Minutes to raise core body temp." },
-                        { name: "Dynamic Arm & Shoulder Swings", info: "2 Sets x 15 reps each direction." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Machine Tricep Ext + Diamond Push-ups", info: "3 Sets x 10-12 reps." },
-                        { name: "SUPERSET 2: DB Overhead Extension + Close-Grip Push-ups", info: "3 Sets x 10-12 reps." },
-                        { name: "SUPERSET 3: DB French Press + Dips to Failure", info: "3 Sets to muscle burnout." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min DB Arm Complex", info: "Non-stop DB Hex Press, DB Tricep Extensions, and DB Kickbacks." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Overhead Tricep Stretch", info: "Hold 30s per arm." },
-                        { name: "Cross-Body Shoulder Stretch", info: "Hold 30s per arm." }
-                    ]
-                }
-            ]
+  const workoutData = {
+    1: {
+      title: "Day 1: Upper Body Strength & High Fat Burn 🏋️‍♂️",
+      meta: "⏱️ 60–90 Mins | 🎯 Target: Upper Body & High Calorie Burn",
+      warmup: [
+        "🔄 Arm Circles: 30s forward, 30s backward",
+        "🧣 Towel / Band Pass-Throughs: 10–12 reps",
+        "🧗 Cat-Cow & Walkouts: 8 reps"
+      ],
+      supersets: [
+        {
+          title: "Superset 1: Primary Push & Pull",
+          exercises: [
+            { name: "1A. Flat Dumbbell Chest Press 🛋️", details: "3 sets x 10–12 reps (5 kg per hand)" },
+            { name: "1B. Bent-Over Dumbbell Rows 🚣", details: "3 sets x 10–12 reps (5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
         },
-        Tue: {
-            title: "Tuesday: Biceps + Chest",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Jumping Jacks + Arm Circles", info: "3 Rounds x 45s work / 15s rest." },
-                        { name: "Band Pull-Aparts / Light Flyes", info: "2 Sets x 15 reps." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Machine Chest Press + Clap Push-ups", info: "3 Sets x 10 reps." },
-                        { name: "SUPERSET 2: Incline DB Press + DB Bicep Curls", info: "3 Sets x 10-12 reps." },
-                        { name: "SUPERSET 3: Bodyweight Dips + Diamond Push-ups", info: "3 Sets to burnout." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min DB Chest Flye & Bicep Curl Burnout", info: "Continuous light DB work until failure." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Doorway Chest Stretch", info: "Hold 45s." },
-                        { name: "Bicep Wall Stretch", info: "Hold 30s per side." }
-                    ]
-                }
-            ]
+        {
+          title: "Superset 2: Vertical Push & Pull",
+          exercises: [
+            { name: "2A. Seated Dumbbell Overhead Press 🪑", details: "3 sets x 8–10 reps (5 kg per hand)" },
+            { name: "2B. Dumbbell High Pulls / Upright Rows 🏋️", details: "3 sets x 10–12 reps (5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
         },
-        Wed: {
-            title: "Wednesday: Forearms + Abs",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Rowing Machine / Cross Trainer", info: "5-10 Minutes continuous pulse." },
-                        { name: "Cat-Camel & Torso Rotations", info: "2 Sets x 10 reps." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Wrist Grippers + Dragon Fly / Leg Lifts", info: "4 Sets x 15 reps." },
-                        { name: "SUPERSET 2: Windshield Wipers + Russian Twists", info: "3 Sets x 15-20 reps." },
-                        { name: "SUPERSET 3: Heavy DB Wrist Curls + Plank Hold", info: "3 Sets x 15 reps + 60s Plank." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min Burpee & DB Farmer Hold Sprints", info: "Max reps burpees with heavy DB holds." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Cobra Stretch", info: "Hold 45s for abdominal wall extension." },
-                        { name: "Wrist Extensor & Flexor Stretches", info: "Hold 30s per arm." }
-                    ]
-                }
-            ]
+        {
+          title: "Superset 3: Arm Hypertrophy",
+          exercises: [
+            { name: "3A. Dumbbell Bicep Curls 🦾", details: "3 sets x 12 reps (5 kg per hand)" },
+            { name: "3B. Overhead Dumbbell Triceps Extensions 🦾", details: "3 sets x 12 reps (5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
         },
-        Thu: {
-            title: "Thursday: Arms + Triceps",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Jump Rope / Shadow Boxing", info: "5 Minutes continuous pulse." },
-                        { name: "Scapular Push-ups", info: "2 Sets x 12 reps." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Machine Seated Rows + DB Lateral Raises", info: "3 Sets x 12 reps (Joint balance & posture)." },
-                        { name: "SUPERSET 2: DB Overhead Tricep Ext + One-Arm Push-ups", info: "3 Sets x 8-10 reps." },
-                        { name: "SUPERSET 3: DB Hammer Curls + Tricep Dips", info: "3 Sets x 12 reps." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min DB Renegade Row & Press Complex", info: "Non-stop alternating DB rows and overhead presses." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Child's Pose with Arm Reach", info: "Hold 60s." },
-                        { name: "Tricep Wall Stretch", info: "Hold 30s per arm." }
-                    ]
-                }
-            ]
+        {
+          title: "Superset 4: Full-Body Fat-Burn Finisher ⚡",
+          exercises: [
+            { name: "4A. Dumbbell Goblet Thrusters 🏋️", details: "3 sets x 10–12 reps (5 kg dumbbell at chest)" },
+            { name: "4B. Dumbbell Renegade Rows / Plank Rows 🧘", details: "3 sets x 8–10 reps per side" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        }
+      ],
+      cooldown: [
+        "🚪 Doorway Chest Stretch: Hold 30s per side",
+        "🙆 Overhead Triceps Stretch: Hold 30s per side",
+        "🧘 Cross-Body Shoulder Stretch: Hold 30s per side"
+      ]
+    },
+    2: {
+      title: "Day 2: Lower Body & Agility A 🦵🏀",
+      meta: "⏱️ 60–90 Mins | 🎯 Target: Legs, Core & Explosive Stamina",
+      warmup: [
+        "🔄 Leg Swings: 10 reps forward/side per leg",
+        "🦵 Bodyweight Squats & Lunges: 10 reps each",
+        "🐊 Dynamic Spiderman Lunges: 5 reps per side"
+      ],
+      supersets: [
+        {
+          title: "Superset 1: Primary Quad & Posterior Chain",
+          exercises: [
+            { name: "1A. Dumbbell Goblet Squats 🏋️", details: "3 sets x 10–12 reps (5–7.5 kg)" },
+            { name: "1B. Dumbbell Romanian Deadlifts (RDLs) 🏋️", details: "3 sets x 10–12 reps (5–7.5 kg)" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
         },
-        Fri: {
-            title: "Friday: Biceps + Chest",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Treadmill Sprints (15s on / 15s off)", info: "5 Minutes total duration." },
-                        { name: "Dynamic Chest Flyes", info: "2 Sets x 15 reps." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Machine Chest Flyes + Flying Incline Push-ups", info: "3 Sets x 10 reps." },
-                        { name: "SUPERSET 2: DB Preacher Curls + Reverse Push-ups", info: "3 Sets x 12 reps." },
-                        { name: "SUPERSET 3: Wide-Arm Push-ups + DB Concentration Curls", info: "3 Sets to burnout." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min DB Push-up to Curl Burnout", info: "Continuous DB push-ups into standing curls." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Pectoral Wall Stretch", info: "Hold 45s each side." },
-                        { name: "Seated Bicep Stretch", info: "Hold 45s." }
-                    ]
-                }
-            ]
+        {
+          title: "Superset 2: Single-Leg Strength & Core",
+          exercises: [
+            { name: "2A. Dumbbell Reverse Lunges 🦵", details: "3 sets x 10 reps per leg (5 kg per hand)" },
+            { name: "2B. Dumbbell Farmer’s Carry 🚶‍♂️", details: "3 sets x 45-second walks (7.5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
         },
-        Sat: {
-            title: "Saturday: Forearm + Chest",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Agility Ladder / Side Shuffles", info: "5 Minutes dynamic movement." },
-                        { name: "Wrist Rotations & Push-up Prep", info: "2 Sets x 15 reps." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Heavy DB Bench Press + Archer Push-ups", info: "3 Sets x 8-10 reps." },
-                        { name: "SUPERSET 2: Gripper Hold + Wide-Arm Push-ups", info: "3 Sets x Max reps." },
-                        { name: "SUPERSET 3: DB Reverse Wrist Curls + Pushaway Push-ups", info: "3 Sets x 15 reps." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min DB Floor Press & Plank Hold", info: "Alternating 30s DB Press / 30s High Plank." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Thread the Needle Stretch", info: "Hold 45s per side." },
-                        { name: "Forearm Flexor Release", info: "Hold 30s per arm." }
-                    ]
-                }
-            ]
+        {
+          title: "Superset 3: Lateral Strength & Glute Focus",
+          exercises: [
+            { name: "3A. Dumbbell Side Lunges 🦵", details: "3 sets x 10 reps per leg (5 kg held at chest)" },
+            { name: "3B. Dumbbell Glute Bridges 🍑", details: "3 sets x 12–15 reps (7.5 kg on hips)" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
         },
-        Sun: {
-            title: "Sunday: Abs + Legs",
-            phases: [
-                {
-                    name: "🔥 Warmup Circuit",
-                    items: [
-                        { name: "Stationary Bike / High Knees", info: "5-10 Minutes leg activation." },
-                        { name: "Bodyweight Air Squats & Leg Swings", info: "2 Sets x 15 reps." }
-                    ]
-                },
-                {
-                    name: "⚡ High-Intensity Supersets",
-                    items: [
-                        { name: "SUPERSET 1: Leg Press / Heavy DB Squats + Pistol Squats", info: "3 Sets x 10 reps per leg." },
-                        { name: "SUPERSET 2: Machine Leg Extensions + Jump Squats", info: "3 Sets x 12 reps." },
-                        { name: "SUPERSET 3: DB Goblet Squats + Hanging Leg Raises", info: "3 Sets x 12 reps." }
-                    ]
-                },
-                {
-                    name: "🏋️ Dumbbell Finisher",
-                    items: [
-                        { name: "3-Min DB Thruster & Jump Squat Complex", info: "Non-stop metabolic leg burnout." }
-                    ]
-                },
-                {
-                    name: "🧘 Cool-Down Stretches",
-                    items: [
-                        { name: "Standing Quad Stretch", info: "Hold 45s per leg." },
-                        { name: "Seated Hamstring & Calf Stretch", info: "Hold 45s." }
-                    ]
-                }
-            ]
+        {
+          title: "Superset 4: Core & Rotational Power",
+          exercises: [
+            { name: "4A. Dumbbell Woodchoppers 🪵", details: "3 sets x 10 reps per side (5 kg)" },
+            { name: "4B. Russian Twists 🌪️", details: "3 sets x 20 total reps (5 kg)" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
+        },
+        {
+          title: "Agility & Stamina Finisher Block (15–20 Mins) ⚡",
+          exercises: [
+            { name: "1. Defensive Side Shuffles 🏀", details: "40s work / 20s rest (3–4 rounds)" },
+            { name: "2. Line Jumps / Quick Feet 🪢", details: "40s work / 20s rest (3–4 rounds)" },
+            { name: "3. Bodyweight Jump Squats or High Knees 💥", details: "40s work / 20s rest (3–4 rounds)" },
+            { name: "4. Plank Hold 🧘", details: "40s work / 20s rest (3–4 rounds)" }
+          ],
+          rest: "⏱️ Continuous interval format"
         }
-    };
-
-    let activeDay = 'Mon';
-
-    function saveState() {
-        localStorage.setItem('vTaper365_v6', JSON.stringify(state));
-    }
-
-    function resetProgress() {
-        if (confirm("Reset all tracked data back to default?")) {
-            localStorage.removeItem('vTaper365_v6');
-            location.reload();
+      ],
+      cooldown: [
+        "🧘 Standing Quad Stretch: 30–45s per side",
+        "🧘 Seated Hamstring Stretch: 30–45s per side",
+        "🧘 Pigeon Pose: 30–45s per side"
+      ]
+    },
+    3: {
+      title: "Day 3: Upper Body B (Shoulders & Arms Focus) 🦾",
+      meta: "⏱️ 60–90 Mins | 🎯 Target: Shoulder Width & Arm Definition",
+      warmup: [
+        "🔄 Arm Circles & Shoulder Dislocations: 2 mins",
+        "🧗 Walkouts into Plank: 6 reps",
+        "🧣 Band Pass-Throughs: 10 reps"
+      ],
+      supersets: [
+        {
+          title: "Superset 1: Heavy Shoulder & Upper Back",
+          exercises: [
+            { name: "1A. Arnold Press 🪑", details: "3 sets x 10–12 reps (5 kg per hand)" },
+            { name: "1B. Single-Arm Dumbbell Rows 🚣", details: "3 sets x 10–12 reps per side (7.5 kg)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 2: Shoulder Lateral & Rear Delts",
+          exercises: [
+            { name: "2A. Dumbbell Lateral Raises 🦅", details: "3 sets x 12 reps (2–5 kg per hand)" },
+            { name: "2B. Bent-Over Rear Delt Flyes 🦅", details: "3 sets x 12 reps (2–5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 3: Bicep & Tricep Isolation",
+          exercises: [
+            { name: "3A. Dumbbell Hammer Curls 🔨", details: "3 sets x 12 reps (5 kg per hand)" },
+            { name: "3B. Dumbbell Tricep Kickbacks 🦾", details: "3 sets x 12 reps per arm (5 kg)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 4: High-Tempo Upper Conditioning",
+          exercises: [
+            { name: "4A. Dumbbell Push Press 🏋️", details: "3 sets x 12–15 reps (5 kg per hand)" },
+            { name: "4B. Plank Shoulder Taps 🧘", details: "3 sets x 45 seconds continuous" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
         }
-    }
-
-    function updateXPDisplay() {
-        const level = Math.floor(state.xp / 350) + 1;
-        const currentXP = state.xp % 350;
-        const fillPct = (currentXP / 350) * 100;
-
-        document.getElementById('user-level').innerText = `LEVEL ${level} ATHLETE`;
-        document.getElementById('xp-text').innerText = `${currentXP} / 350 XP`;
-        document.getElementById('xp-fill').style.width = `${fillPct}%`;
-    }
-
-    function addXP(amount) {
-        state.xp += amount;
-        saveState();
-        updateXPDisplay();
-    }
-
-    function startTimer(seconds) {
-        stopTimer();
-        let timeLeft = seconds;
-        updateTimerDisplay(timeLeft);
-        timerInterval = setInterval(() => {
-            timeLeft--;
-            updateTimerDisplay(timeLeft);
-            if (timeLeft <= 0) {
-                stopTimer();
-                alert("⏰ Rest interval over! Time for your next superset.");
-            }
-        }, 1000);
-    }
-
-    function stopTimer() {
-        if (timerInterval) clearInterval(timerInterval);
-    }
-
-    function updateTimerDisplay(s) {
-        const mins = Math.floor(s / 60);
-        const secs = s % 60;
-        document.getElementById('timer').innerText = 
-            `${mins.toString().padStart(2, '0')}:${secs.toString().padStart(2, '0')}`;
-    }
-
-    function logMetrics() {
-        state.weight = parseFloat(document.getElementById('input-weight').value) || 78;
-        const newBf = parseFloat(document.getElementById('input-bf').value) || 18;
-        state.bf = newBf;
-        
-        state.bfHistory.push(newBf);
-        state.labelsHistory.push(`Log ${state.bfHistory.length}`);
-        
-        saveState();
-        updateChart();
-    }
-
-    function initChart() {
-        const ctx = document.getElementById('bfChart').getContext('2d');
-        chartInstance = new Chart(ctx, {
-            type: 'line',
-            data: {
-                labels: state.labelsHistory,
-                datasets: [{
-                    label: 'Body Fat %',
-                    data: state.bfHistory,
-                    borderColor: '#00ffaa',
-                    backgroundColor: 'rgba(0, 255, 170, 0.1)',
-                    borderWidth: 2,
-                    fill: true
-                }]
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                scales: {
-                    x: { ticks: { color: '#64748b' } },
-                    y: { ticks: { color: '#64748b' } }
-                }
-            }
-        });
-    }
-
-    function updateChart() {
-        if (chartInstance) {
-            chartInstance.data.labels = state.labelsHistory;
-            chartInstance.data.datasets[0].data = state.bfHistory;
-            chartInstance.update();
+      ],
+      cooldown: [
+        "🧘 Overhead Triceps Stretch: 30s per side",
+        "🧘 Cross-Body Shoulder Stretch: 30s per side",
+        "🧘 Forearm & Wrist Stretch: 30s per side"
+      ]
+    },
+    4: {
+      title: "Day 4: Upper Body C (Push / Pull High-Tempo) 🔥",
+      meta: "⏱️ 60–90 Mins | 🎯 Target: Volume, Endurance & High Fat Burn",
+      warmup: [
+        "🔄 Arm Circles & Chest Openers: 3 mins",
+        "🧗 Cat-Cow & Walkouts: 8 reps",
+        "🏃 Light March in Place: 2 mins"
+      ],
+      supersets: [
+        {
+          title: "Superset 1: Chest & Pullover Combo",
+          exercises: [
+            { name: "1A. Incline (or Flat) Dumbbell Chest Flyes 🦅", details: "3 sets x 12 reps (5 kg per hand)" },
+            { name: "1B. Dumbbell Pullovers 🛋️", details: "3 sets x 12 reps (5–7.5 kg dumbbell)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 2: Vertical Pull & Push Volume",
+          exercises: [
+            { name: "2A. Dumbbell Upright Rows 🏋️", details: "3 sets x 12 reps (5 kg per hand)" },
+            { name: "2B. Seated Dumbbell Shoulder Press 🪑", details: "3 sets x 10–12 reps (5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 3: Core & Arm Combo",
+          exercises: [
+            { name: "3A. Concentrated Bicep Curls 🦾", details: "3 sets x 12 reps per arm (5 kg)" },
+            { name: "3B. Dumbbell Overhead Tricep Extension 🦾", details: "3 sets x 12 reps (5–7.5 kg)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 4: Core & Fat-Burn Finisher",
+          exercises: [
+            { name: "4A. Dumbbell Woodchoppers 🪵", details: "3 sets x 10 reps per side (5 kg)" },
+            { name: "4B. Mountain Climbers / Plank Taps 🧗", details: "3 sets x 45 seconds" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
         }
-    }
-
-    function loadDay(dayKey) {
-        activeDay = dayKey;
-        document.querySelectorAll('.nav-btn').forEach(b => {
-            b.classList.toggle('active', b.innerText.startsWith(dayKey));
-        });
-
-        const data = workoutPlan[dayKey];
-        document.getElementById('day-title').innerText = data.title;
-        document.getElementById('rpe-input').value = state.rpeLogs[dayKey] || 8;
-
-        const container = document.getElementById('exercise-list');
-        container.innerHTML = '';
-
-        data.phases.forEach((phase, pIdx) => {
-            const phaseKey = `${dayKey}_p${pIdx}`;
-            const allChecked = phase.items.every((_, iIdx) => state.completed[`${phaseKey}_i${iIdx}`]);
-            
-            let isCollapsed = state.collapsedPhases[phaseKey];
-            if (isCollapsed === undefined) {
-                isCollapsed = allChecked;
-            }
-
-            const header = document.createElement('div');
-            header.className = `phase-header ${allChecked ? 'completed' : ''}`;
-            header.innerHTML = `
-                <span>${phase.name} ${allChecked ? '✓' : ''}</span>
-                <span>${isCollapsed ? '► OPEN' : '▼ HIDE'}</span>
-            `;
-            header.onclick = () => togglePhase(phaseKey);
-
-            const content = document.createElement('div');
-            content.className = `phase-content ${isCollapsed ? 'collapsed' : ''}`;
-
-            phase.items.forEach((item, iIdx) => {
-                const itemKey = `${phaseKey}_i${iIdx}`;
-                const checked = state.completed[itemKey] || false;
-                
-                const div = document.createElement('div');
-                div.className = 'exercise-item';
-                div.innerHTML = `
-                    <div style="display:flex; align-items:center; gap:10px;">
-                        <input type="checkbox" ${checked ? 'checked' : ''} onchange="toggleCheck('${itemKey}', '${phaseKey}', ${phase.items.length})" style="width:20px; height:20px;">
-                        <span class="ex-title">${item.name}</span>
-                    </div>
-                    <div class="ex-info">💡 ${item.info}</div>
-                `;
-                content.appendChild(div);
-            });
-
-            container.appendChild(header);
-            container.appendChild(content);
-        });
-    }
-
-    function togglePhase(phaseKey) {
-        state.collapsedPhases[phaseKey] = !state.collapsedPhases[phaseKey];
-        saveState();
-        loadDay(activeDay);
-    }
-
-    function checkDayCompletion() {
-        const data = workoutPlan[activeDay];
-        let totalItems = 0;
-        let checkedItems = 0;
-
-        data.phases.forEach((phase, pIdx) => {
-            phase.items.forEach((_, iIdx) => {
-                totalItems++;
-                if (state.completed[`${activeDay}_p${pIdx}_i${iIdx}`]) checkedItems++;
-            });
-        });
-
-        if (totalItems > 0 && checkedItems === totalItems && !state.completed[`dayDone_${activeDay}`]) {
-            state.completed[`dayDone_${activeDay}`] = true;
-            state.completedDaysCount++;
-            addXP(50); // Flat 50 XP award per completed day protocol
-            
-            if (state.completedDaysCount % 7 === 0) {
-                document.getElementById('progression-modal').style.display = 'flex';
-            }
+      ],
+      cooldown: [
+        "🚪 Doorway Chest Stretch: 30s per side",
+        "🧘 Lat & Side Stretch: 30s per side",
+        "🧘 Cross-Body Shoulder Stretch: 30s per side"
+      ]
+    },
+    5: {
+      title: "Day 5: Lower Body & Agility B 🦵🏃",
+      meta: "⏱️ 60–90 Mins | 🎯 Target: Single-Leg Balance, Glutes & Stamina",
+      warmup: [
+        "🔄 Leg Swings & Hip Circles: 3 mins",
+        "🦵 Bodyweight Squats: 12 reps",
+        "🏃 Light Jog in Place: 2 mins"
+      ],
+      supersets: [
+        {
+          title: "Superset 1: Posterior Chain Focus",
+          exercises: [
+            { name: "1A. Dumbbell Stiff-Leg Deadlifts 🏋️", details: "3 sets x 10–12 reps (5–7.5 kg per hand)" },
+            { name: "1B. Bulgarian Split Squats 🦵", details: "3 sets x 8–10 reps per leg (5 kg per hand or BW)" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
+        },
+        {
+          title: "Superset 2: Lateral & Calf Strength",
+          exercises: [
+            { name: "2A. Dumbbell Side Lunges 🦵", details: "3 sets x 10 reps per leg (5 kg at chest)" },
+            { name: "2B. Dumbbell Calf Raises 🦶", details: "3 sets x 15–20 reps (7.5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
+        },
+        {
+          title: "Superset 3: Core Rotational Power",
+          exercises: [
+            { name: "3A. Russian Twists 🌪️", details: "3 sets x 20 total reps (5 kg dumbbell)" },
+            { name: "3B. Leg Raises / Reverse Crunches 🧱", details: "3 sets x 12–15 reps" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
+        },
+        {
+          title: "Superset 4: Lower Body Fat Burn",
+          exercises: [
+            { name: "4A. Dumbbell Sumo Squats 🏋️", details: "3 sets x 12 reps (7.5 kg held vertically)" },
+            { name: "4B. Plank Hold 🧘", details: "3 sets x 45–60 seconds" }
+          ],
+          rest: "⏱️ Rest 60–90s between sets"
+        },
+        {
+          title: "Light Dumbbell Conditioning Block (12 Mins) ⚡",
+          exercises: [
+            { name: "1. Light Dumbbell Woodchoppers 🪵", details: "40s work / 20s rest (3 rounds)" },
+            { name: "2. Dumbbell Skater Bound & Hold ⚡", details: "40s work / 20s rest (3 rounds)" },
+            { name: "3. Light Dumbbell Clean & Press 🏋️‍♂️", details: "40s work / 20s rest (3 rounds)" },
+            { name: "4. Farmer's Hold & March in Place ✊", details: "40s work / 20s rest (3 rounds)" }
+          ],
+          rest: "⏱️ Continuous interval format"
         }
-    }
-
-    function acceptProgression() {
-        state.progressionOffset += 2;
-        document.getElementById('progression-modal').style.display = 'none';
-        saveState();
-        alert("💪 Progression Applied! Target workloads increased by +2.");
-    }
-
-    function deferProgression() {
-        const days = parseInt(document.getElementById('defer-days').value) || 3;
-        state.progressionDeferredUntil = Date.now() + (days * 24 * 60 * 60 * 1000);
-        document.getElementById('progression-modal').style.display = 'none';
-        saveState();
-        alert(`⏱️ Progression deferred for ${days} days.`);
-    }
-
-    function toggleCheck(itemKey, phaseKey, totalItemsInPhase) {
-        state.completed[itemKey] = !state.completed[itemKey];
-        
-        let checkedCount = 0;
-        for (let i = 0; i < totalItemsInPhase; i++) {
-            if (state.completed[`${phaseKey}_i${i}`]) checkedCount++;
+      ],
+      cooldown: [
+        "🧘 Standing Quad Stretch: 30s per side",
+        "🧘 Seated Hamstring Stretch: 30s per side",
+        "🧘 Pigeon Pose: 30s per side"
+      ]
+    },
+    6: {
+      title: "Day 6: Upper Body D (Full Upper Fat-Burn Finisher) ⚡",
+      meta: "⏱️ 60–90 Mins | 🎯 Target: Full Upper Body Burn & High Energy",
+      warmup: [
+        "🔄 Arm Circles & Shoulder Dislocations: 3 mins",
+        "🧗 Cat-Cow & Walkouts: 8 reps",
+        "🧣 Band Pass-Throughs: 10 reps"
+      ],
+      supersets: [
+        {
+          title: "Superset 1: Compound Chest & Row",
+          exercises: [
+            { name: "1A. Flat Dumbbell Chest Press 🛋️", details: "3 sets x 10–12 reps (5–7.5 kg per hand)" },
+            { name: "1B. Bent-Over Dumbbell Rows 🚣", details: "3 sets x 10–12 reps (5–7.5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 2: Overhead Press & High Pull",
+          exercises: [
+            { name: "2A. Seated Dumbbell Overhead Press 🪑", details: "3 sets x 10 reps (5 kg per hand)" },
+            { name: "2B. Dumbbell High Pulls / Upright Rows 🏋️", details: "3 sets x 12 reps (5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 3: Arm Hypertrophy Pair",
+          exercises: [
+            { name: "3A. Dumbbell Bicep Curls 🦾", details: "3 sets x 12 reps (5 kg per hand)" },
+            { name: "3B. Overhead Dumbbell Tricep Extension 🦾", details: "3 sets x 12 reps (5 kg per hand)" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
+        },
+        {
+          title: "Superset 4: Full-Body Fat-Burn Finisher",
+          exercises: [
+            { name: "4A. Dumbbell Goblet Thrusters 🏋️", details: "3 sets x 10–12 reps (5 kg dumbbell)" },
+            { name: "4B. Dumbbell Renegade Rows / Plank Hold 🧘", details: "3 sets x 8–10 reps per side" }
+          ],
+          rest: "⏱️ Rest 60s between sets"
         }
-
-        if (checkedCount === totalItemsInPhase) {
-            state.collapsedPhases[phaseKey] = true;
-        } else if (checkedCount === totalItemsInPhase - 1 && !state.completed[itemKey]) {
-            state.collapsedPhases[phaseKey] = false;
+      ],
+      cooldown: [
+        "🚪 Doorway Chest Stretch: 30s per side",
+        "🧘 Cross-Body Shoulder Stretch: 30s per side",
+        "🙆 Overhead Triceps Stretch: 30s per side"
+      ]
+    },
+    7: {
+      title: "Day 7: Active Recovery & Rest 🧘",
+      meta: "⏱️ 20–30 Mins | 🎯 Target: Muscle Repair, Hydration & Rebuild",
+      warmup: [
+        "🚶 Relaxed Walk: 20–30 minutes light pace"
+      ],
+      supersets: [
+        {
+          title: "Full Body Mobility & Soft Tissue Recovery",
+          exercises: [
+            { name: "1. Cat-Cow Stretch 🐈", details: "2 sets x 10 slow reps" },
+            { name: "2. Pigeon Pose (Hips & Glutes) 🧘", details: "2 sets x 45s per side" },
+            { name: "3. Doorway Chest Stretch 🚪", details: "2 sets x 45s per side" },
+            { name: "4. Seated Hamstring & Calf Stretch 🧘", details: "2 sets x 45s per side" }
+          ],
+          rest: "⏱️ Take your time, focus on deep breathing"
         }
-
-        checkDayCompletion();
-        saveState();
-        loadDay(activeDay);
+      ],
+      cooldown: [
+        "💧 Focus on high water intake & nutrient-dense meals today!"
+      ]
     }
+  };
 
-    function saveRPE() {
-        const val = document.getElementById('rpe-input').value;
-        state.rpeLogs[activeDay] = val;
-        saveState();
-    }
+  function showDay(dayNumber) {
+    // Update button states
+    const buttons = document.querySelectorAll('.day-btn');
+    buttons.forEach((btn, index) => {
+      if (index + 1 === dayNumber) {
+        btn.classList.add('active');
+      } else {
+        btn.classList.remove('active');
+      }
+    });
 
-    window.onload = () => {
-        document.getElementById('input-weight').value = state.weight;
-        document.getElementById('input-bf').value = state.bf;
-        updateXPDisplay();
-        initChart();
-        loadDay('Mon');
-    };
+    const data = workoutData[dayNumber];
+    const container = document.getElementById('workoutContent');
+
+    let supersetsHTML = '';
+    data.supersets.forEach(ss => {
+      let exercisesHTML = '';
+      ss.exercises.forEach(ex => {
+        exercisesHTML += `
+          <li class="exercise-item">
+            <span class="exercise-name">${ex.name}</span>
+            <span class="exercise-details">${ex.details}</span>
+          </li>
+        `;
+      });
+
+      supersetsHTML += `
+        <div class="superset-block">
+          <div class="superset-title">${ss.title}</div>
+          <ul class="exercise-list">
+            ${exercisesHTML}
+          </ul>
+          <div class="rest-note">${ss.rest}</div>
+        </div>
+      `;
+    });
+
+    let warmupHTML = data.warmup.map(item => `<li>${item}</li>`).join('');
+    let cooldownHTML = data.cooldown.map(item => `<li>${item}</li>`).join('');
+
+    container.innerHTML = `
+      <div class="workout-header">
+        <h2>${data.title}</h2>
+        <div class="meta">${data.meta}</div>
+      </div>
+
+      <div class="section-title">Warm-Up & Mobility (5–8 Mins) 🧘</div>
+      <ul class="warmup-list">
+        ${warmupHTML}
+      </ul>
+
+      <div class="section-title">Main Workout & Supersets 🏋️‍♂️</div>
+      ${supersetsHTML}
+
+      <div class="section-title">Cool-Down Stretches (5 Mins) 🧘‍♂️</div>
+      <ul class="stretches-list">
+        ${cooldownHTML}
+      </ul>
+    `;
+  }
+
+  // Load Day 1 by default on initial page visit
+  showDay(1);
 </script>
+
 </body>
 </html>
-
-
